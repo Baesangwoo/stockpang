@@ -1,0 +1,28 @@
+﻿@{
+    ViewBag.Title = "Index";
+}
+
+<h2>
+
+
+    <label>삼성전자 현재 금액 :</label>
+    <label id="SS_VALUE">@ViewBag.Value</label>
+</h2>
+<script>
+    setInterval(function () {
+        $.ajax({
+            type: "GET",
+            url: "/Home/GetValue",
+            data: {},
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                successFunc03(response);
+            },
+        });
+        function successFunc03(jsondata) {
+            var ss_value = document.getElementById("SS_VALUE");
+            ss_value.innerHTML = jsondata;
+        }
+    }, 1000);
+</script>
