@@ -1,5 +1,77 @@
-﻿@{
+﻿@model System.Data.DataSet
+@using System.Data
+
+@{
     ViewBag.Title = "StockList";
 }
 
+<style>
+    .Main {
+        overflow-x: auto;
+        overflow-y: auto;
+    }
+</style>
+
 <h2>StockList</h2>
+
+<div class="Main">
+    <table class="table table-striped table-hover" style="font-size:75%">
+        <tr>
+            <th>종목코드</th>
+            <th>종목명</th>
+            <th>종목타입</th>
+            <th>종목종류</th>
+            <th>시가총액</th>
+            <th>매출액</th>
+            <th>영업이익</th>
+            <th>당기순이익</th>
+            <th>PER</th>
+            <th>추정PER</th>
+            <th>업종PER</th>
+            <th>주가</th>
+            <th>네이버목표주가</th>
+            <th>매출-3Y</th>
+            <th>매출-2Y</th>
+            <th>매출-1Y</th>
+            <th>매출Y</th>
+            <th>영업이익-3Y</th>
+            <th>영업이익-2Y</th>
+            <th>영업이익-1Y</th>
+            <th>영업이익Y</th>
+            <th>순이익-3Y</th>
+            <th>순이익-2Y</th>
+            <th>순이익-1Y</th>
+            <th>순이익Y</th>
+        </tr>
+        @foreach (DataRow row in Model.Tables[0].Rows)
+        {
+            <tr>
+                <td>@row["STOCK_CODE"]</td>
+                <td>@row["STOCK_NAME"]</td>
+                <td>@row["STOCK_CLASS"]</td>
+                <td>@row["STOCK_KIND"]</td>
+                <td>@row["TOTAL_AMT"]</td>
+                <td>@row["SALES_AMT"]</td>
+                <td>@row["BIZ_PROFIT"]</td>
+                <td>@row["NET_PROFIT"]</td>
+                <td>@row["PER"]%</td>
+                <td>@row["EST_PER"]%</td>
+                <td>@row["BIZ_PER"]%</td>
+                <td>@row["STOCK_PRICE"]</td>
+                <td>@row["NAVER_PRICE"]</td>
+                <td>@row["SA_Y3"]</td>
+                <td>@row["SA_Y2"]</td>
+                <td>@row["SA_Y1"]</td>
+                <td>@row["SA_Y0"]</td>
+                <td>@row["BP_Y3"]</td>
+                <td>@row["BP_Y2"]</td>
+                <td>@row["BP_Y1"]</td>
+                <td>@row["BP_Y0"]</td>
+                <td>@row["NP_Y3"]</td>
+                <td>@row["NP_Y2"]</td>
+                <td>@row["NP_Y1"]</td>
+                <td>@row["NP_Y0"]</td>
+            </tr>
+        }
+    </table>
+</div>

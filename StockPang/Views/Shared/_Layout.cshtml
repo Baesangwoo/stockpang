@@ -85,11 +85,24 @@
                                 <a class="nav-link dropdown-toggle pl-md-3 position-relative" href="javascript:void(0)"
                                    id="bell" role="button" data-toggle="dropdown" aria-haspopup="true"
                                    aria-expanded="false">
-                                    <span>
-                                        hi
-                                    </span>
+                                    <span><i data-feather="bell" class="svg-icon"></i></span>
+                                    <span class="badge badge-primary notify-no rounded-circle" id="Note"></span>
                                 </a>
+                                <div class="dropdown-menu dropdown-menu-left mailbox animated bounceInDown">
+                                    <ul class="list-style-none">
+                                        <li>
+                                            <div class="message-center notifications position-relative" id="NoteData">
 
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <a class="nav-link pt-3 text-center text-dark" href="javascript:void(0);">
+                                                <strong>Check all notifications</strong>
+                                                <i class="fa fa-angle-right"></i>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
                             </li>
                         </ul>
                     <!-- ============================================================== -->
@@ -171,7 +184,8 @@
             </div>
 
             <footer class="footer text-center text-muted">
-                <a href="http://www.stockpang.co.kr">스톡팡</a>.
+                <a href="http://www.stockpang.kr">스톡팡</a>.
+                <label id="foot"></label>
             </footer>
             <!-- ============================================================== -->
             <!-- End Page wrapper  -->
@@ -188,3 +202,78 @@
 </body>
 
 </html>
+
+<script>
+    $(document).ready()
+    {
+        var Note = document.getElementById("Note");
+        Note.innerHTML = "1";
+
+        var Datas = document.createElement('a');
+
+        const value = "<a href=\"javascript:"
+         + "void(0)\""
+         + "class=\"message-item d-flex align-items-center border-bottom px-3 py-2\">"
+         + "<div class=\"btn btn-danger rounded-circle btn-circle\" style=\"width:50px\">"
+         + "<i data-feather=\""
+         + "message-square"                                                     //여기는 아이콘
+         + "\" class=\"text-white\">"
+         + "</i>"
+         + "</div>"
+         + "<div class=\"w-75 d-inline-block v-middle pl-2\">"
+         + "<h6 class=\"message-title mb-0 mt-1\">"
+         + "Luanch Admin"                                                       //여기는 보낸사람
+         + "</h6>"
+         + "<span class=\"font-12 text-nowrap d-block text-muted\">"
+         + "Just see the my new admin! 글자가 더 길어지면 어떻게 되는 것일까??" //여기는 메시지
+         + "</span>"
+         + "<span class=\"font-12 text-nowrap d-block text-muted\">"
+         + "9:30 AM"                                                            //여기는 보낸시간
+         + "</span>"
+         + "</div>"
+         + "</a>"
+
+        Datas.innerHTML = value;
+
+        document.getElementById("NoteData").appendChild(Datas);
+
+    }
+</script>
+
+
+<script>
+    setInterval(function () {
+        var Note = document.getElementById("Note");
+        Note.innerHTML = "2";
+
+        var Datas = document.createElement('a');
+
+        const value = "<a href=\"javascript:"
+         + "void(0)\""
+         + "class=\"message-item d-flex align-items-center border-bottom px-3 py-2\">"
+         + "<div class=\"btn btn-danger rounded-circle btn-circle\" style=\"width:50px\">"
+         + "<i data-feather=\""
+         + "message-square"                                                     //여기는 아이콘
+         + "\" class=\"text-white\">"
+         + "</i>"
+         + "</div>"
+         + "<div class=\"w-75 d-inline-block v-middle pl-2\">"
+         + "<h6 class=\"message-title mb-0 mt-1\">"
+         + "Luanch Admin"                                                       //여기는 보낸사람
+         + "</h6>"
+         + "<span class=\"font-12 text-nowrap d-block text-muted\">"
+         + "없어지고 새로 생긴 메시지입니당" //여기는 메시지
+         + "</span>"
+         + "<span class=\"font-12 text-nowrap d-block text-muted\">"
+         + "9:30 AM"                                                            //여기는 보낸시간
+         + "</span>"
+         + "</div>"
+         + "</a>"
+
+        Datas.innerHTML = value;
+
+        const myNode = document.getElementById("NoteData");
+        myNode.textContent = '';
+        myNode.appendChild(Datas);
+    }, 10000);
+</script>
