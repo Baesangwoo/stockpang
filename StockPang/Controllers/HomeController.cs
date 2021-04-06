@@ -63,6 +63,13 @@ namespace StockPang.Controllers
             return View(data);
         }
 
+        public ActionResult StockDetail()
+        {
+
+            return View();
+        }
+
+
         public ActionResult GetValue()
         {
             WebClient wc = new WebClient();
