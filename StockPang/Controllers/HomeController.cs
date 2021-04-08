@@ -54,10 +54,12 @@ namespace StockPang.Controllers
                 string Data03 = row["BIZ_PROFIT"].ToString();
                 string Data04 = row["NET_PROFIT"].ToString();
 
+                //문자로 변경한 결과값을 보관하지 못해서 컬럼이 스트링형으로 만들어짐 
                 row["TOTAL_AMT"] = string.Format("{0:# #### #### #### #### ####}", Convert.ToInt32(Data01)).TrimStart().Replace(" ", ",");
                 row["SALES_AMT"] = string.Format("{0:# #### #### #### #### ####}", Convert.ToInt32(Data02)).TrimStart().Replace(" ", ",");
                 row["BIZ_PROFIT"] = string.Format("{0:# #### #### #### #### ####}", Convert.ToInt32(Data03)).TrimStart().Replace(" ", ",");
                 row["NET_PROFIT"] = string.Format("{0:# #### #### #### #### ####}", Convert.ToInt32(Data04)).TrimStart().Replace(" ", ",");
+
             }
 
             return View(data);
