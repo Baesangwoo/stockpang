@@ -3,14 +3,16 @@
 
 @{
     ViewBag.Title = "StockList";
-}
 
-<style>
-    .Main {
-        overflow-x: auto;
-        overflow-y: auto;
+    
     }
-</style>
+
+@*<style>
+    .Main td {
+        text-align: end;
+    }
+
+</style>*@
 
 <h2>StockList</h2>
 
@@ -50,11 +52,11 @@
                 <td>@row["STOCK_NAME"]</td>
                 <td>@row["STOCK_CLASS"]</td>
                 <td>@row["STOCK_KIND"]</td>
-                <td>@row["TOTAL_AMT"]</td>
-                <td>@row["SALES_AMT"]</td>
-                <td style="align-items:flex-end">@row["BIZ_PROFIT"]</td>
-                <td style="align-items:flex-end">@row["NET_PROFIT"]</td>
-                <td style="align-items:flex-end">@row["PER"]%</td>
+                <td>@row["TOTAL_AMT_C"]</td>
+                <td>@row["SALES_AMT_C"]</td>
+                <td>@row["BIZ_PROFIT_C"]</td>
+                <td>@row["NET_PROFIT_C"]</td>
+                <td>@row["PER"]%</td>
                 <td>@row["EST_PER"]%</td>
                 <td>@row["BIZ_PER"]%</td>
                 <td>@row["STOCK_PRICE"]</td>
