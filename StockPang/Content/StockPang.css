@@ -6,6 +6,16 @@
     text-align:end;
 }
 
+ /*.이 클래스, #이 ID 그냥 쓰면 Tag */ 
+ 
+ .td_left{
+    text-align:left;
+}
+
+.td_center{
+    text-align:center;
+}
+
 td_num_end{
     text-align:end;
 }
