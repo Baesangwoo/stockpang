@@ -43,9 +43,13 @@ namespace StockPang.Controllers
             return View();
         }
 
-        public ActionResult StockList()
+        [HttpGet]
+        public ActionResult StockList(string Serch_text, string Serch_psr, string Serch_por, string Serch_per, string Serch_biz_rate, string Serch_net_rate)
         {
-            DataSet data = modelTest.GetAllData();
+            DataSet data = null;
+            
+            data = modelStockList.GetSearchData(Serch_text, Serch_psr, Serch_por, Serch_per, Serch_biz_rate, Serch_net_rate);
+            
             data.Tables[0].Columns.Add("TOTAL_AMT_C");
             data.Tables[0].Columns.Add("SALES_AMT_C");
             data.Tables[0].Columns.Add("BIZ_PROFIT_C");
@@ -60,12 +64,12 @@ namespace StockPang.Controllers
 
 
 
-            foreach(DataRow row in data.Tables[0].Rows)
+            foreach (DataRow row in data.Tables[0].Rows)
             {
                 row["CAL_PSR"] = 0;
                 row["CAL_POR"] = 0;
                 row["CAL_PER"] = 0;
-                
+
                 row["BIZ_RATE"] = 0;
                 row["NET_RATE"] = 0;
 
@@ -86,7 +90,7 @@ namespace StockPang.Controllers
                 }
                 else
                 {
-                    row["BIZ_PROFIT_C"] = "-" + string.Format("{0:# #### #### #### #### ####}", Convert.ToInt32(Data03)*-1).TrimStart().Replace(" ", ",");
+                    row["BIZ_PROFIT_C"] = "-" + string.Format("{0:# #### #### #### #### ####}", Convert.ToInt32(Data03) * -1).TrimStart().Replace(" ", ",");
                 }
 
                 if (Convert.ToDouble(row["NET_PROFIT"].ToString()) >= 0)
@@ -95,7 +99,7 @@ namespace StockPang.Controllers
                 }
                 else
                 {
-                    row["NET_PROFIT_C"] = "-" + string.Format("{0:# #### #### #### #### ####}", Convert.ToInt32(Data04)*-1).TrimStart().Replace(" ", ",");
+                    row["NET_PROFIT_C"] = "-" + string.Format("{0:# #### #### #### #### ####}", Convert.ToInt32(Data04) * -1).TrimStart().Replace(" ", ",");
                 }
 
 
@@ -111,7 +115,7 @@ namespace StockPang.Controllers
                     row["CAL_POR"] = (Convert.ToDouble(row["TOTAL_AMT"].ToString()) / Convert.ToDouble(row["BIZ_PROFIT"].ToString())).ToString("0.00");
                 }
                 //PER : 주가이익배율 
-                if (Convert.ToInt32(row["NET_PROFIT"].ToString()) != 0) 
+                if (Convert.ToInt32(row["NET_PROFIT"].ToString()) != 0)
                 {
                     row["CAL_PER"] = (Convert.ToDouble(row["TOTAL_AMT"].ToString()) / Convert.ToDouble(row["NET_PROFIT"].ToString())).ToString("0.00");
                 }
@@ -130,6 +134,7 @@ namespace StockPang.Controllers
 
             return View(data);
         }
+
 
         public ActionResult StockDetail()
         {

@@ -4,18 +4,30 @@
 @{
     ViewBag.Title = "StockList";
 
-    
-    }
+}
 
 
 @*<style>
-    .Main td {
-        text-align: end;
-    }
-</style>*@
+        .Main td {
+            text-align: end;
+        }
+    </style>*@
 
-<h2>StockList</h2>
+<h4>StockList</h4>
+<div class="Search" style="font-size:75%">
+    <form action="StockList" method="get" role="form">
+        <label>검색조건</label> <input name="Serch_text" type="text" size="10" maxlength="20" />&nbsp&nbsp&nbsp
+        <label>PSR</label> <input name="Serch_psr" type="number" maxlength="3" style="width:50px" />이하&nbsp&nbsp&nbsp
+        <label>POR</label> <input name="Serch_por" type="number" size="5" maxlength="3" style="width:50px" />이하&nbsp&nbsp&nbsp
+        <label>PER</label> <input name="Serch_per" type="number" size="5" maxlength="3" style="width:50px" />이하&nbsp&nbsp&nbsp
+        <label>영업이익율</label> <input name="Serch_biz_rate" type="number" size="3" maxlength="4" style="width:50px" />이상&nbsp&nbsp&nbsp
+        <label>순이익율</label> <input name="Serch_net_rate" type="number" size="3" maxlength="4" style="width:50px" />이상&nbsp&nbsp&nbsp
 
+        <input type="submit" value="Search" />
+    </form>
+
+
+</div>
 <div class="Main">
     <table class="table-striped table-hover" style="font-size:75%">
         <tr>
@@ -31,7 +43,7 @@
             <th style="width: 70px; text-align: end">현재주가</th>
             <th style="width: 70px; text-align: end">Naver<br />목표주가</th>
             <th style="width: 85px; text-align: end">시총/매출액<br />1.2이하(PSR)</th>
-            <th style="width: 85px; text-align: end">시총/영업이익<br />10이하</th>
+            <th style="width: 85px; text-align: end">시총/영업이익<br />10이하(POR)</th>
             <th style="width: 80px; text-align: end">시총/순이익<br />15이하(PER)</th>
             <th style="width: 70px; text-align: end">영업이익율<br />10%이상</th>
             <th style="width: 70px; text-align: end">순이익율<br />6%이상</th>
@@ -41,24 +53,26 @@
         {
             <tr>
                 <td class="td_center" style="width:55px;text-align:center">@row["STOCK_CODE"]</td>
-                <td class="td_left" style="width:100px;text-align:left" ><a href="@row["STOCK_URL"]">@row["STOCK_NAME"]</a></td>
+                <td class="td_left" style="width:100px;text-align:left"><a href="@row["STOCK_URL"]" target="_blank">@row["STOCK_NAME"]</a></td>
                 <td>@row["TOTAL_AMT_C"]</td>
                 <td>@row["SALES_AMT_C"]</td>
 
-                @if (Convert.ToDouble(row["BIZ_PROFIT"].ToString()) >= 0) { 
+                @if (Convert.ToDouble(row["BIZ_PROFIT"].ToString()) >= 0)
+                {
                     <td>@row["BIZ_PROFIT_C"]</td>
                 }
                 else
                 {
-                   <td style="color:red">@row["BIZ_PROFIT_C"]</td> 
-                }    
-                @if (Convert.ToDouble(row["NET_PROFIT"].ToString()) >= 0) {
+                    <td style="color:red">@row["BIZ_PROFIT_C"]</td>
+                }
+                @if (Convert.ToDouble(row["NET_PROFIT"].ToString()) >= 0)
+                {
                     <td>@row["NET_PROFIT_C"]</td>
-                }    
+                }
                 else
                 {
-                   <td style="color:red">@row["NET_PROFIT_C"]</td> 
-                }    
+                    <td style="color:red">@row["NET_PROFIT_C"]</td>
+                }
 
                 <!--  PER  -->
                 @if (Convert.ToDouble(row["PER"].ToString()) <= 15 && Convert.ToDouble(row["PER"].ToString()) > 0)
@@ -84,23 +98,23 @@
                 <td>@row["NAVER_PRICE"]</td>
 
                 <!--  계산 시총 / 매출액  -->
-                @if (Convert.ToDouble(row["CAL_PSR"].ToString()) <= 1.2 && Convert.ToDouble(row["CAL_PSR"].ToString()) >= 0 )
+                @if (Convert.ToDouble(row["CAL_PSR"].ToString()) <= 1.2 && Convert.ToDouble(row["CAL_PSR"].ToString()) >= 0)
                 {
-                    <td style="color: red; background-color: lightskyblue">@row["CAL_PSR"]</td>            
-                }    
+                    <td style="color: red; background-color: lightskyblue">@row["CAL_PSR"]</td>
+                }
                 else
                 {
-                    <td>@row["CAL_PSR"]</td>            
-                }                        
+                    <td>@row["CAL_PSR"]</td>
+                }
 
                 <!--  계산 시총 / 영업이익  -->
                 @if (Convert.ToDouble(row["CAL_POR"].ToString()) <= 10 && Convert.ToDouble(row["CAL_POR"].ToString()) >= 0)
                 {
-                    <td style="color: red; background-color: lightskyblue">@row["CAL_POR"]</td>            
+                    <td style="color: red; background-color: lightskyblue">@row["CAL_POR"]</td>
                 }
                 else
                 {
-                    <td>@row["CAL_POR"]</td>            
+                    <td>@row["CAL_POR"]</td>
                 }
 
                 <!--  CAL_PER : 계산 시총 / 순이익  -->
@@ -127,12 +141,12 @@
                 @if (Convert.ToDouble(row["NET_RATE"].ToString()) >= 6)
                 {
                     <td style="color:red; background-color:cyan ">@row["NET_RATE"]</td>
-                }    
-                else    
+                }
+                else
                 {
                     <td>@row["NET_RATE"]</td>
                 }
-                                    
+
 
             </tr>
         }
