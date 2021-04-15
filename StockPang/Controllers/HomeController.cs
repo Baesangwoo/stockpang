@@ -55,24 +55,8 @@ namespace StockPang.Controllers
             data.Tables[0].Columns.Add("BIZ_PROFIT_C");
             data.Tables[0].Columns.Add("NET_PROFIT_C");
 
-            data.Tables[0].Columns.Add("CAL_PSR");
-            data.Tables[0].Columns.Add("CAL_POR");
-            data.Tables[0].Columns.Add("CAL_PER");
-
-            data.Tables[0].Columns.Add("BIZ_RATE");              //영업이익율 
-            data.Tables[0].Columns.Add("NET_RATE");              //순이익율 
-
-
-
             foreach (DataRow row in data.Tables[0].Rows)
             {
-                row["CAL_PSR"] = 0;
-                row["CAL_POR"] = 0;
-                row["CAL_PER"] = 0;
-
-                row["BIZ_RATE"] = 0;
-                row["NET_RATE"] = 0;
-
 
                 string Data01 = row["TOTAL_AMT"].ToString();    //시총 
                 string Data02 = row["SALES_AMT"].ToString();    //매출액 
@@ -102,34 +86,6 @@ namespace StockPang.Controllers
                     row["NET_PROFIT_C"] = "-" + string.Format("{0:# #### #### #### #### ####}", Convert.ToInt32(Data04) * -1).TrimStart().Replace(" ", ",");
                 }
 
-
-                //PSR : 주가매출배율
-                if (Convert.ToInt32(row["SALES_AMT"].ToString()) != 0)
-                {
-                    row["CAL_PSR"] = (Convert.ToDouble(row["TOTAL_AMT"].ToString()) / Convert.ToDouble(row["SALES_AMT"].ToString())).ToString("0.00");
-                }
-
-                //POR : 주가영업이익배율
-                if (Convert.ToInt32(row["BIZ_PROFIT"].ToString()) != 0)
-                {
-                    row["CAL_POR"] = (Convert.ToDouble(row["TOTAL_AMT"].ToString()) / Convert.ToDouble(row["BIZ_PROFIT"].ToString())).ToString("0.00");
-                }
-                //PER : 주가이익배율 
-                if (Convert.ToInt32(row["NET_PROFIT"].ToString()) != 0)
-                {
-                    row["CAL_PER"] = (Convert.ToDouble(row["TOTAL_AMT"].ToString()) / Convert.ToDouble(row["NET_PROFIT"].ToString())).ToString("0.00");
-                }
-
-                //BIZ_RATE : 영업이익율 
-                if (Convert.ToInt32(row["SALES_AMT"].ToString()) != 0)
-                {
-                    row["BIZ_RATE"] = (Convert.ToDouble(row["BIZ_PROFIT"].ToString()) / Convert.ToDouble(row["SALES_AMT"].ToString()) * 100).ToString("0.00");
-                }
-                //NET_RATE : 순이익율 
-                if (Convert.ToInt32(row["SALES_AMT"].ToString()) != 0)
-                {
-                    row["NET_RATE"] = (Convert.ToDouble(row["NET_PROFIT"].ToString()) / Convert.ToDouble(row["SALES_AMT"].ToString()) * 100).ToString("0.00");
-                }
             }
 
             return View(data);
