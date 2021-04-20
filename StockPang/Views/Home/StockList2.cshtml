@@ -13,15 +13,15 @@
         }
     </style>*@
 
-<h4>StockList</h4>
+<h4>StockList2</h4>
 <div class="Search" style="font-size:75%">
-    <form action="StockList" method="get" role="form">
+    <form action="StockList2" method="get" role="form">
         <label>검색조건</label> <input name="Serch_text" type="text" size="10" maxlength="20" />&nbsp&nbsp&nbsp
-        <label>PSR</label> <input name="Serch_psr" type="number" maxlength="3" style="width:50px" />이하&nbsp&nbsp&nbsp
-        <label>POR</label> <input name="Serch_por" type="number" size="5" maxlength="3" style="width:50px" />이하&nbsp&nbsp&nbsp
-        <label>PER</label> <input name="Serch_per" type="number" size="5" maxlength="3" style="width:50px" />이하&nbsp&nbsp&nbsp
-        <label>영업이익율</label> <input name="Serch_biz_rate" type="number" size="3" maxlength="4" style="width:50px" />이상&nbsp&nbsp&nbsp
-        <label>순이익율</label> <input name="Serch_net_rate" type="number" size="3" maxlength="4" style="width:50px" />이상&nbsp&nbsp&nbsp
+        <label>PER</label> <input name="Serch_per" type="number" maxlength="3" style="width:50px" />이하&nbsp&nbsp&nbsp
+        <label>목표주가Gap</label> <input name="Serch_gap" type="number" size="5" maxlength="3" style="width:50px" />이상&nbsp&nbsp&nbsp
+        <label>매출성장율</label> <input name="Serch_sa_rate" type="number" size="5" maxlength="3" style="width:50px" />이상&nbsp&nbsp&nbsp
+        <label>영업이익성장율</label> <input name="Serch_bp_rate" type="number" size="3" maxlength="4" style="width:50px" />이상&nbsp&nbsp&nbsp
+        <label>순이익성장율</label> <input name="Serch_np_rate" type="number" size="3" maxlength="4" style="width:50px" />이상&nbsp&nbsp&nbsp
 
         <input type="submit" value="Search" />
     </form>
@@ -37,6 +37,8 @@
             <th style="width: 70px; text-align: end">매출액</th>
             <th style="width: 70px; text-align: end">영업이익</th>
             <th style="width: 80px; text-align: end">당기순이익</th>
+
+            <th style="width: 80px; text-align: end">시총/순이익<br />15이하(PER)</th>
 
             <th style="width: 70px; text-align: end">현재주가</th>
             <th style="width: 70px; text-align: end">Naver<br />목표주가</th>
@@ -74,6 +76,7 @@
                     <td style="color:red">@row["NET_PROFIT_C"]</td>
                 }
 
+                <td>@row["CAL_PER"]</td>
                 <td>@row["STOCK_PRICE"]</td>
                 <td>@row["NAVER_PRICE"]</td>
                 <td>@row["PRICE_GAP"]</td>

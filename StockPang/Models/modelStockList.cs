@@ -72,5 +72,52 @@ namespace StockPang.Models
 
             return user;
         }
+
+        public static DataSet GetSearchData2(string Serch_text, string Serch_per, string Serch_gap, string Serch_sa_rate, string Serch_bp_rate, string Serch_np_rate)
+        {
+
+            string sSql = @"";
+            sSql += "   SELECT  STOCK_CODE, STOCK_NAME, STOCK_URL, TOTAL_AMT, SALES_AMT, BIZ_PROFIT, NET_PROFIT, PER, EST_PER, BIZ_PER, STOCK_PRICE, NAVER_PRICE, ";
+            sSql += "           CAL_PSR, CAL_POR, CAL_PER, BIZ_RATE, NET_RATE, ";
+            sSql += "           SA_Y3, SA_Y2, SA_Y1, SA_Y0, BP_Y3, BP_Y2, BP_Y1, BP_Y0, NP_Y3, NP_Y2, NP_Y1, NP_Y0, ";
+            sSql += "           SA_RATE, BP_RATE, NP_RATE ";
+            sSql += "   FROM    STOCK_INFO";
+            sSql += "   WHERE ( STOCK_CODE LIKE '%" + Serch_text + "%'" + " OR STOCK_NAME LIKE '%" + Serch_text + "%')";
+            if (!string.IsNullOrEmpty(Serch_per) && Serch_per != "")
+            {
+                sSql += "   AND     CAL_PER   <= " + Serch_per;
+            }
+
+            if (!string.IsNullOrEmpty(Serch_gap) && Serch_gap != "")
+            {
+                sSql += "   AND  (  (NAVER_PRICE - STOCK_PRICE) / NAVER_PRICE * 100  >= " + Serch_gap + " OR  (NAVER_PRICE - STOCK_PRICE) / NAVER_PRICE * 100 <=  (" + Serch_gap + "*-1)  )";
+                sSql += "   AND   NAVER_PRICE <> 0 ";  
+            }
+
+            if (!string.IsNullOrEmpty(Serch_sa_rate) && Serch_sa_rate != "")
+            {
+                sSql += "   AND     SA_RATE   >= " + Serch_sa_rate;
+            }
+            if (!string.IsNullOrEmpty(Serch_bp_rate) && Serch_bp_rate != "")
+            {
+                sSql += "   AND     BP_RATE   >= " + Serch_bp_rate;
+            }
+            if (!string.IsNullOrEmpty(Serch_np_rate) && Serch_np_rate != "")
+            {
+                sSql += "   AND     NP_RATE   >= " + Serch_np_rate;
+            }
+            sSql += "   ORDER BY STOCK_INFO_ID";
+
+
+            DataSet user;
+
+            using (var db = new MSSQLDB())
+            {
+                user = db.Query(sSql);
+            }
+
+            return user;
+        }
+
     }
 }

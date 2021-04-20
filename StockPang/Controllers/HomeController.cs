@@ -91,11 +91,11 @@ namespace StockPang.Controllers
             return View(data);
         }
 
-        public ActionResult StockList2(string Serch_text, string Serch_psr, string Serch_por, string Serch_per, string Serch_biz_rate, string Serch_net_rate)
+        public ActionResult StockList2(string Serch_text, string Serch_per, string Serch_gap, string Serch_sa_rate, string Serch_bp_rate, string Serch_np_rate)
         {
             DataSet data = null;
 
-            data = modelStockList.GetSearchData(Serch_text, Serch_psr, Serch_por, Serch_per, Serch_biz_rate, Serch_net_rate);
+            data = modelStockList.GetSearchData2(Serch_text, Serch_per, Serch_gap, Serch_sa_rate, Serch_bp_rate, Serch_np_rate);
 
             data.Tables[0].Columns.Add("TOTAL_AMT_C");
             data.Tables[0].Columns.Add("SALES_AMT_C");
@@ -136,13 +136,13 @@ namespace StockPang.Controllers
                     row["NET_PROFIT_C"] = "-" + string.Format("{0:# #### #### #### #### ####}", Convert.ToInt32(Data04) * -1).TrimStart().Replace(" ", ",");
                 }
 
-                row["PRICE_GAP"] = Convert.ToDouble(row["NAVER_PRICE"].ToString()) - Convert.ToDouble(row["STOCK_PRICE"].ToString());
+                row["PRICE_GAP"] = Convert.ToDecimal(row["NAVER_PRICE"].ToString()) - Convert.ToDecimal(row["STOCK_PRICE"].ToString());
 
                 if (Convert.ToDouble(row["NAVER_PRICE"].ToString()) != 0) {
-                    row["PRICE_GAP_RATE"] = Convert.ToDouble(Convert.ToDouble(row["PRICE_GAP"].ToString()) / Convert.ToDouble(row["NAVER_PRICE"].ToString()) * 100).ToString("0.00");
+                    row["PRICE_GAP_RATE"] = Convert.ToDecimal(Convert.ToDecimal(row["PRICE_GAP"].ToString()) / Convert.ToDecimal(row["NAVER_PRICE"].ToString()) * 100).ToString("0.0#");
                 }
                 else {
-                    row["PRICE_GAP_RATE"] = 0;
+                    row["PRICE_GAP_RATE"] = 0.ToString("0.0#");
                 }
 
     
