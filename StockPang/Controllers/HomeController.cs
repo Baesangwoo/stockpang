@@ -91,6 +91,66 @@ namespace StockPang.Controllers
             return View(data);
         }
 
+        public ActionResult StockList2(string Serch_text, string Serch_psr, string Serch_por, string Serch_per, string Serch_biz_rate, string Serch_net_rate)
+        {
+            DataSet data = null;
+
+            data = modelStockList.GetSearchData(Serch_text, Serch_psr, Serch_por, Serch_per, Serch_biz_rate, Serch_net_rate);
+
+            data.Tables[0].Columns.Add("TOTAL_AMT_C");
+            data.Tables[0].Columns.Add("SALES_AMT_C");
+            data.Tables[0].Columns.Add("BIZ_PROFIT_C");
+            data.Tables[0].Columns.Add("NET_PROFIT_C");
+
+            data.Tables[0].Columns.Add("PRICE_GAP");
+            data.Tables[0].Columns.Add("PRICE_GAP_RATE");
+
+            foreach (DataRow row in data.Tables[0].Rows)
+            {
+
+                string Data01 = row["TOTAL_AMT"].ToString();    //시총 
+                string Data02 = row["SALES_AMT"].ToString();    //매출액 
+                string Data03 = row["BIZ_PROFIT"].ToString();   //영업이익 
+                string Data04 = row["NET_PROFIT"].ToString();   //순이익 
+
+                //문자로 변경한 결과값을 보관하지 못해서 컬럼이 스트링형으로 만들어짐 
+                row["TOTAL_AMT_C"] = string.Format("{0:# #### #### #### #### ####}", Convert.ToInt32(Data01)).TrimStart().Replace(" ", ",");
+                row["SALES_AMT_C"] = string.Format("{0:# #### #### #### #### ####}", Convert.ToInt32(Data02)).TrimStart().Replace(" ", ",");
+
+
+                if (Convert.ToDouble(row["BIZ_PROFIT"].ToString()) >= 0)
+                {
+                    row["BIZ_PROFIT_C"] = string.Format("{0:# #### #### #### #### ####}", Convert.ToInt32(Data03)).TrimStart().Replace(" ", ",");
+                }
+                else
+                {
+                    row["BIZ_PROFIT_C"] = "-" + string.Format("{0:# #### #### #### #### ####}", Convert.ToInt32(Data03) * -1).TrimStart().Replace(" ", ",");
+                }
+
+                if (Convert.ToDouble(row["NET_PROFIT"].ToString()) >= 0)
+                {
+                    row["NET_PROFIT_C"] = string.Format("{0:# #### #### #### #### ####}", Convert.ToInt32(Data04)).TrimStart().Replace(" ", ",");
+                }
+                else
+                {
+                    row["NET_PROFIT_C"] = "-" + string.Format("{0:# #### #### #### #### ####}", Convert.ToInt32(Data04) * -1).TrimStart().Replace(" ", ",");
+                }
+
+                row["PRICE_GAP"] = Convert.ToDouble(row["NAVER_PRICE"].ToString()) - Convert.ToDouble(row["STOCK_PRICE"].ToString());
+
+                if (Convert.ToDouble(row["NAVER_PRICE"].ToString()) != 0) {
+                    row["PRICE_GAP_RATE"] = Convert.ToDouble(Convert.ToDouble(row["PRICE_GAP"].ToString()) / Convert.ToDouble(row["NAVER_PRICE"].ToString()) * 100).ToString("0.00");
+                }
+                else {
+                    row["PRICE_GAP_RATE"] = 0;
+                }
+
+    
+            }
+
+            return View(data);
+        }
+
 
         public ActionResult StockDetail()
         {

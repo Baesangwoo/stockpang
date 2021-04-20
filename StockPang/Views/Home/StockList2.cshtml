@@ -2,7 +2,7 @@
 @using System.Data
 
 @{
-    ViewBag.Title = "StockList";
+    ViewBag.Title = "StockList2";
 
 }
 
@@ -37,17 +37,16 @@
             <th style="width: 70px; text-align: end">매출액</th>
             <th style="width: 70px; text-align: end">영업이익</th>
             <th style="width: 80px; text-align: end">당기순이익</th>
-            <th style="width: 60px; text-align: end">업종PER</th>
+
             <th style="width: 70px; text-align: end">현재주가</th>
             <th style="width: 70px; text-align: end">Naver<br />목표주가</th>
+            <th style="width: 70px; text-align: end">목표주가 Gap</th>
+            <th style="width: 70px; text-align: end">목표주가 Gap %</th>
 
-            <th style="width: 60px; text-align: end">PER</th>
-            <th style="width: 60px; text-align: end">추정PER</th>
-            <th style="width: 85px; text-align: end">시총/매출액<br />1.2이하(PSR)</th>
-            <th style="width: 85px; text-align: end">시총/영업이익<br />10이하(POR)</th>
-            <th style="width: 80px; text-align: end">시총/순이익<br />15이하(PER)</th>
-            <th style="width: 70px; text-align: end">영업이익율<br />10%이상</th>
-            <th style="width: 70px; text-align: end">순이익율<br />6%이상</th>
+            <th style="width: 80px; text-align: end">매출성장율<br />최근3년</th>
+            <th style="width: 80px; text-align: end">영업이익<br />성장율<br />최근3년</th>
+            <th style="width: 80px; text-align: end">순이익성장율<br />최근3년</th>
+
 
         </tr>
         @foreach (DataRow row in Model.Tables[0].Rows)
@@ -75,78 +74,49 @@
                     <td style="color:red">@row["NET_PROFIT_C"]</td>
                 }
 
-                <td>@row["BIZ_PER"]</td>
                 <td>@row["STOCK_PRICE"]</td>
                 <td>@row["NAVER_PRICE"]</td>
+                <td>@row["PRICE_GAP"]</td>
 
-                <!--  PER  -->
-                @if (Convert.ToDouble(row["PER"].ToString()) <= 15 && Convert.ToDouble(row["PER"].ToString()) > 0)
+                <!--  PRICE_GAP_RATE  -->
+                @if (Convert.ToDouble(row["PRICE_GAP_RATE"].ToString()) >= 30 || Convert.ToDouble(row["PRICE_GAP_RATE"].ToString()) <= -30)
                 {
-                    <td style="background-color:lightgreen">@row["PER"]</td>
+                    <td style="background-color:lightgreen">@row["PRICE_GAP_RATE"]</td>
                 }
                 else
                 {
-                    <td>@row["PER"]</td>
-                }
-                <!--  EST_PER  -->
-                @if (Convert.ToDouble(row["EST_PER"].ToString()) <= 15 && Convert.ToDouble(row["EST_PER"].ToString()) > 0)
-                {
-                    <td style="background-color:lightgreen ">@row["EST_PER"]</td>
-                }
-                else
-                {
-                    <td>@row["PER"]</td>
+                    <td>@row["PRICE_GAP_RATE"]</td>
                 }
 
 
-                <!--  계산 시총 / 매출액  -->
-                @if (Convert.ToDouble(row["CAL_PSR"].ToString()) <= 1.2 && Convert.ToDouble(row["CAL_PSR"].ToString()) >= 0)
+                <!--  매출성장율  -->
+                @if (Convert.ToDouble(row["SA_RATE"].ToString()) >= 30 )
                 {
-                    <td style="color: red; background-color: lightskyblue">@row["CAL_PSR"]</td>
+                    <td style="color: red; background-color:lightskyblue">@row["SA_RATE"]</td>
                 }
                 else
                 {
-                    <td>@row["CAL_PSR"]</td>
+                    <td>@row["SA_RATE"]</td>
                 }
 
-                <!--  계산 시총 / 영업이익  -->
-                @if (Convert.ToDouble(row["CAL_POR"].ToString()) <= 10 && Convert.ToDouble(row["CAL_POR"].ToString()) >= 0)
+                <!--  영업이익성장율 : 30이상 -->
+                @if (Convert.ToDouble(row["BP_RATE"].ToString()) >= 30 )
                 {
-                    <td style="color: red; background-color: lightskyblue">@row["CAL_POR"]</td>
+                    <td style="color:red; background-color:cyan ">@row["BP_RATE"]</td>
                 }
                 else
                 {
-                    <td>@row["CAL_POR"]</td>
+                    <td>@row["BP_RATE"]</td>
                 }
 
-                <!--  CAL_PER : 계산 시총 / 순이익  -->
-                @if (Convert.ToDouble(row["CAL_PER"].ToString()) <= 15 && Convert.ToDouble(row["CAL_PER"].ToString()) >= 0)
+                <!--  순이익성장율 : 30이상  -->
+                @if (Convert.ToDouble(row["NP_RATE"].ToString()) >= 30)
                 {
-                    <td style="color: red; background-color:lightskyblue">@row["CAL_PER"]</td>
+                    <td style="color:red; background-color:cyan ">@row["NP_RATE"]</td>
                 }
                 else
                 {
-                    <td>@row["CAL_PER"]</td>
-                }
-
-                <!--  영업이익율 : 10이상 -->
-                @if (Convert.ToDouble(row["BIZ_RATE"].ToString()) >= 10)
-                {
-                    <td style="color:red; background-color:cyan ">@row["BIZ_RATE"]</td>
-                }
-                else
-                {
-                    <td>@row["BIZ_RATE"]</td>
-                }
-
-                <!--  순이익율 : 6이상  -->
-                @if (Convert.ToDouble(row["NET_RATE"].ToString()) >= 6)
-                {
-                    <td style="color:red; background-color:cyan ">@row["NET_RATE"]</td>
-                }
-                else
-                {
-                    <td>@row["NET_RATE"]</td>
+                    <td>@row["NP_RATE"]</td>
                 }
 
 
