@@ -44,11 +44,11 @@ namespace StockPang.Controllers
         }
 
         [HttpGet]
-        public ActionResult StockList(string Serch_text, string Serch_psr, string Serch_por, string Serch_per, string Serch_biz_rate, string Serch_net_rate)
+        public ActionResult StockList(string Search_name, string Search_class, string Search_psr, string Search_por, string Search_per, string Search_biz_rate, string Search_net_rate)
         {
             DataSet data = null;
             
-            data = modelStockList.GetSearchData(Serch_text, Serch_psr, Serch_por, Serch_per, Serch_biz_rate, Serch_net_rate);
+            data = modelStockList.GetSearchData(Search_name, Search_class, Search_psr, Search_por, Search_per, Search_biz_rate, Search_net_rate);
             
             data.Tables[0].Columns.Add("TOTAL_AMT_C");
             data.Tables[0].Columns.Add("SALES_AMT_C");
@@ -91,11 +91,11 @@ namespace StockPang.Controllers
             return View(data);
         }
 
-        public ActionResult StockList2(string Serch_text, string Serch_per, string Serch_gap, string Serch_sa_rate, string Serch_bp_rate, string Serch_np_rate)
+        public ActionResult StockList2(string Search_name, string Search_class, string Search_per, string Search_gap, string Search_sa_rate, string Search_bp_rate, string Search_np_rate)
         {
             DataSet data = null;
 
-            data = modelStockList.GetSearchData2(Serch_text, Serch_per, Serch_gap, Serch_sa_rate, Serch_bp_rate, Serch_np_rate);
+            data = modelStockList.GetSearchData2(Search_name, Search_class, Search_per, Search_gap, Search_sa_rate, Search_bp_rate, Search_np_rate);
 
             data.Tables[0].Columns.Add("TOTAL_AMT_C");
             data.Tables[0].Columns.Add("SALES_AMT_C");
@@ -136,20 +136,61 @@ namespace StockPang.Controllers
                     row["NET_PROFIT_C"] = "-" + string.Format("{0:# #### #### #### #### ####}", Convert.ToInt32(Data04) * -1).TrimStart().Replace(" ", ",");
                 }
 
-                row["PRICE_GAP"] = Convert.ToDecimal(row["NAVER_PRICE"].ToString()) - Convert.ToDecimal(row["STOCK_PRICE"].ToString());
-
                 if (Convert.ToDouble(row["NAVER_PRICE"].ToString()) != 0) {
+                    row["PRICE_GAP"] = Convert.ToDecimal(row["NAVER_PRICE"].ToString()) - Convert.ToDecimal(row["STOCK_PRICE"].ToString());
                     row["PRICE_GAP_RATE"] = Convert.ToDecimal(Convert.ToDecimal(row["PRICE_GAP"].ToString()) / Convert.ToDecimal(row["NAVER_PRICE"].ToString()) * 100).ToString("0.0#");
                 }
                 else {
+                    row["PRICE_GAP"] = 0.ToString("0.0#");
                     row["PRICE_GAP_RATE"] = 0.ToString("0.0#");
                 }
-
     
             }
 
             return View(data);
         }
+
+        public ActionResult StockReg(string Search_name, string Search_class)
+        {
+            DataSet data = null;
+
+            data = modelStockList.GetSearchReg(Search_name, Search_class );
+
+            data.Tables[0].Columns.Add("STOCK_REG");
+            data.Tables[0].Columns.Add("STOCK_DEL");
+
+            foreach (DataRow row in data.Tables[0].Rows)
+            {
+
+                row["STOCK_REG"] = "등록";    //등록 
+                row["STOCK_DEL"] = "삭제";    //삭제 
+
+            }
+
+            return View(data);
+        }
+
+
+        public ActionResult StockInsert(string Stock_Code, string Stock_Name, string Stock_Remark)
+        {
+            DataSet data = null;
+
+            modelStockList.SetStockInsert(Stock_Code, Stock_Name, Stock_Remark);
+
+
+            return Redirect("StockReg");
+        }
+
+        public ActionResult StockDelete(string Stock_Code)
+        {
+            DataSet data = null;
+
+            modelStockList.SetStockDelete(Stock_Code);
+
+
+            return Redirect("StockReg");
+        }
+
 
 
         public ActionResult StockDetail()

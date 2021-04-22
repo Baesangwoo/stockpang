@@ -869,6 +869,7 @@
     <Content Include="Views\Home\StockList.cshtml" />
     <Content Include="Views\Home\StockDetail.cshtml" />
     <Content Include="Views\Home\StockList2.cshtml" />
+    <Content Include="Views\Home\StockReg.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

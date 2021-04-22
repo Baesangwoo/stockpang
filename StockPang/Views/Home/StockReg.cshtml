@@ -1,0 +1,54 @@
+﻿@model System.Data.DataSet
+@using System.Data
+
+@{
+    ViewBag.Title = "StockReg";
+
+}
+
+
+@*<style>
+        .Main td {
+            text-align: end;
+        }
+    </style>*@
+
+<h4>StockRegister</h4>
+<div class="Search" style="font-size:75%">
+    <form action="StockReg" method="get" role="form">
+        <label>종목명</label> <input name="Search_name" type="text" size="20" maxlength="20" />&nbsp&nbsp&nbsp
+        <label>종목분류</label> <input name="Search_class" type="text" size="20" maxlength="20" />&nbsp&nbsp&nbsp
+
+        <input type="submit" value="Search" />
+    </form>
+
+
+</div>
+<div class="Main">
+    <table class="table-striped table-hover" style="font-size:75%">
+        <tr>
+            <th style="width: 55px; text-align: center">종목코드</th>
+            <th style="width: 130px; text-align:center">종목명</th>
+            <th style="width: 180px; text-align:start">분류1</th>
+            <th style="width: 180px; text-align:start">분류2</th>
+            <th style="width: 250px; text-align:start">기업내용</th>
+
+            <th style="width: 80px; text-align:center">등록</th>
+
+        </tr>
+        @foreach (DataRow row in Model.Tables[0].Rows)
+        {
+            <tr>
+                <td class="td_center" style="width:55px;text-align:center">@row["STOCK_CODE"]</td>
+                <td class="td_center" style="width:130px;text-align:center">@row["STOCK_NAME"]</td>
+
+                <td style="width:180px;text-align:left">@row["STOCK_CLASS1"]</td>
+                <td style="width:180px;text-align:left">@row["STOCK_CLASS2"]</td>
+                <td style="width:250px;text-align:left"> <textarea rows="5" cols="50">@row["STOCK_REMARK"]</textarea></td>
+
+                <td style="text-align: center"> <button class="btn-success btn-group" onclick="location.href='/Home/StockInsert?Stock_Code=@row["STOCK_CODE"]&Stock_Name=@row["STOCK_NAME"] & Stock_Remark = @row["STOCK_REMARK"]'"> 등록</button> </td>
+
+            </tr>
+        }
+    </table>
+</div>
