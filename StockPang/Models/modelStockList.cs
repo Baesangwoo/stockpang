@@ -18,7 +18,7 @@ namespace StockPang.Models
             sSql += "           SA_Y3, SA_Y2, SA_Y1, SA_Y0, BP_Y3, BP_Y2, BP_Y1, BP_Y0, NP_Y3, NP_Y2, NP_Y1, NP_Y0, ";
             sSql += "           SA_RATE, BP_RATE, NP_RATE ";
             sSql += "   FROM    STOCK_INFO";
-            sSql += "   ORDER BY STOCK_INFO_ID";
+            sSql += "   ORDER BY TOTAL_AMT";
 
 
             DataSet user;
@@ -61,7 +61,7 @@ namespace StockPang.Models
             {
                 sSql += "   AND     NET_RATE   >= " + Search_net_rate;
             }
-            sSql += "   ORDER BY STOCK_INFO_ID";
+            sSql += "   ORDER BY TOTAL_AMT";
 
 
             DataSet user;
@@ -108,7 +108,7 @@ namespace StockPang.Models
             {
                 sSql += "   AND     NP_RATE   >= " + Search_np_rate;
             }
-            sSql += "   ORDER BY STOCK_INFO_ID";
+            sSql += "   ORDER BY TOTAL_AMT";
 
 
             DataSet user;
