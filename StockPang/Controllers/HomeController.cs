@@ -171,11 +171,11 @@ namespace StockPang.Controllers
         }
 
 
-        public ActionResult StockInsert(string Stock_Code, string Stock_Name, string Stock_Remark)
+        public ActionResult StockInsert(string Reg_Code, string Reg_Name, string Reg_Remark)
         {
             DataSet data = null;
 
-            modelStockList.SetStockInsert(Stock_Code, Stock_Name, Stock_Remark);
+            modelStockList.SetStockInsert(Reg_Code, Reg_Name, Reg_Remark);
 
 
             return Redirect("StockReg");

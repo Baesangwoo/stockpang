@@ -14,6 +14,25 @@
     </style>*@
 
 <h4>StockRegister</h4>
+<div class="Reg" style="font-size:75%">
+
+    <form action="StockInsert" method="get" role="form">
+        <label>종목코드 : &nbsp</label> <input id="Reg_code" name="Reg_code" type="text" readonly size="20" maxlength="20" />&nbsp&nbsp&nbsp
+        <label>종목명 : &nbsp&nbsp&nbsp </label> <input id="Reg_name"  name="Reg_name" type="text" size="20" maxlength="20" /> <br />
+        <label>종목분류1 : </label> <input id="Reg_class1"  name="Reg_class1" type="text" size="20" maxlength="20" />&nbsp&nbsp&nbsp
+        <label>종목분류2 : </label> <input id="Reg_class2"  name="Reg_class2" type="text" size="20" maxlength="20" /> <br />
+
+        <label>기업내용 : </label> <br />
+        &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+        <textarea id="Reg_remark"  name="Reg_remark" rows="5" cols="50"> </textarea> <br />
+
+        <input type="submit" value="저장" /><br />
+    </form>
+
+</div>
+<br />
+
+<h4>StockSearch</h4>
 <div class="Search" style="font-size:75%">
     <form action="StockReg" method="get" role="form">
         <label>종목명</label> <input name="Search_name" type="text" size="20" maxlength="20" />&nbsp&nbsp&nbsp
@@ -31,7 +50,7 @@
             <th style="width: 130px; text-align:center">종목명</th>
             <th style="width: 180px; text-align:start">분류1</th>
             <th style="width: 180px; text-align:start">분류2</th>
-            <th style="width: 250px; text-align:start">기업내용</th>
+            <th style="width: 250px; text-align:initial">기업내용</th>
 
             <th style="width: 80px; text-align:center">등록</th>
 
@@ -44,11 +63,44 @@
 
                 <td style="width:180px;text-align:left">@row["STOCK_CLASS1"]</td>
                 <td style="width:180px;text-align:left">@row["STOCK_CLASS2"]</td>
-                <td style="width:250px;text-align:left"> <textarea rows="5" cols="50">@row["STOCK_REMARK"]</textarea></td>
+                @*<td style="width:250px;text-align:left"> <textarea rows="5" cols="50" readonly>@row["STOCK_REMARK"]</textarea></td>*@
+                <td style="width:250px;text-align:left"> @row["STOCK_REMARK"]</td>
 
-                <td style="text-align: center"> <button class="btn-success btn-group" onclick="location.href='/Home/StockInsert?Stock_Code=@row["STOCK_CODE"]&Stock_Name=@row["STOCK_NAME"] & Stock_Remark = @row["STOCK_REMARK"]'"> 등록</button> </td>
+
+                <td style="text-align: center"> <button class="btn-success btn-group" onclick="reg_select('@row["STOCK_CODE"]', '@row["STOCK_NAME"]', '@row["STOCK_CLASS1"]', '@row["STOCK_CLASS2"]', '@row["STOCK_REMARK"].ToString().Replace("\r\n", "　")')"> 선택</button> </td>
 
             </tr>
         }
     </table>
 </div>
+
+<script>
+    function reg_select(reg_code, reg_name, reg_class1, reg_class2, reg_remark) {
+
+        var v_reg_code = document.getElementById("Reg_code");
+        var v_reg_name = document.getElementById("Reg_name");
+        var v_reg_class1 = document.getElementById("Reg_class1");
+        var v_reg_class2 = document.getElementById("Reg_class2");
+        var v_reg_remark = document.getElementById("Reg_remark");
+
+        var str = reg_remark;
+        //alert(str);
+        v_reg_remark.value = str.replace(/　/gi, '\r\n');
+
+        /*
+        alert(v_reg_remark);
+        alert(reg_remark);
+        */
+        v_reg_code.value = reg_code;
+        v_reg_name.value = reg_name;
+        v_reg_class1.value = reg_class1;
+        v_reg_class2.value = reg_class2;
+
+
+
+    }
+
+
+
+
+</script>

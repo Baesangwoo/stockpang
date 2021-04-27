@@ -18,7 +18,7 @@ namespace StockPang.Models
             sSql += "           SA_Y3, SA_Y2, SA_Y1, SA_Y0, BP_Y3, BP_Y2, BP_Y1, BP_Y0, NP_Y3, NP_Y2, NP_Y1, NP_Y0, ";
             sSql += "           SA_RATE, BP_RATE, NP_RATE ";
             sSql += "   FROM    STOCK_INFO";
-            sSql += "   ORDER BY TOTAL_AMT";
+            sSql += "   ORDER BY TOTAL_AMT DESC";
 
 
             DataSet user;
@@ -61,7 +61,7 @@ namespace StockPang.Models
             {
                 sSql += "   AND     NET_RATE   >= " + Search_net_rate;
             }
-            sSql += "   ORDER BY TOTAL_AMT";
+            sSql += "   ORDER BY TOTAL_AMT DESC";
 
 
             DataSet user;
@@ -108,7 +108,7 @@ namespace StockPang.Models
             {
                 sSql += "   AND     NP_RATE   >= " + Search_np_rate;
             }
-            sSql += "   ORDER BY TOTAL_AMT";
+            sSql += "   ORDER BY TOTAL_AMT DESC";
 
 
             DataSet user;
@@ -152,20 +152,20 @@ namespace StockPang.Models
 
         }
 
-        public static int SetStockInsert(string Stock_Code, string Stock_Name, string Stock_Remark)
+        public static int SetStockInsert(string Reg_Code, string Reg_Name, string Reg_Remark)
         {
 
             string sSql = @"";
             sSql += "   MERGE INTO STOCK_INFO A  ";
-            sSql += "   USING  ( SELECT '" + Stock_Code + "' STOCK_CODE ) B";
+            sSql += "   USING  ( SELECT '" + Reg_Code + "' STOCK_CODE ) B";
             sSql += "   ON      (A.STOCK_CODE = B.STOCK_CODE )";
             sSql += "   WHEN MATCHED THEN	";
             sSql += "   UPDATE";
-            sSql += "   SET	STOCK_CODE = '" + Stock_Code + "'";
-            sSql += "     , STOCK_NAME = '" + Stock_Name + "'";
+            sSql += "   SET	STOCK_CODE = '" + Reg_Code + "'";
+            sSql += "     , STOCK_NAME = '" + Reg_Name + "'";
             sSql += "   WHEN NOT MATCHED THEN 	";
             sSql += "   INSERT (STOCK_CODE, STOCK_NAME)";
-            sSql += "   VALUES	('" + Stock_Code + "', '" + Stock_Name + "');";
+            sSql += "   VALUES	('" + Reg_Code + "', '" + Reg_Name + "');";
 
             int result;
 
@@ -176,9 +176,9 @@ namespace StockPang.Models
 
             sSql = @"";
             sSql += "   UPDATE STOCK_CLASS  ";
-            sSql += "   SET    STOCK_REMARK = '" + Stock_Remark + "'"; ;
+            sSql += "   SET    STOCK_REMARK = '" + Reg_Remark + "'"; ;
             sSql += "   FROM   STOCK_CLASS A ";
-            sSql += "   WHERE   A.STOCK_CODE = '" + Stock_Code + "'";
+            sSql += "   WHERE   A.STOCK_CODE = '" + Reg_Code + "'";
 
             using (var db = new MSSQLDB())
             {
@@ -193,7 +193,7 @@ namespace StockPang.Models
             sSql += "          STOCK_CLASS2 = B.STOCK_CLASS2  ";
             sSql += "   FROM   STOCK_INFO  A ";
             sSql += "       ,  STOCK_CLASS B ";
-            sSql += "   WHERE   A.STOCK_CODE = '" + Stock_Code + "'";
+            sSql += "   WHERE   A.STOCK_CODE = '" + Reg_Code + "'";
             sSql += "   AND     B.STOCK_CODE = A.STOCK_CODE 	";
             
             using (var db = new MSSQLDB())
