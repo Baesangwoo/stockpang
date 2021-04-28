@@ -54,7 +54,8 @@
         @foreach (DataRow row in Model.Tables[0].Rows)
         {
             <tr>
-                <td class="td_center" style="width:55px;text-align:center">@row["STOCK_CODE"]</td>
+                <td class="td_center" style="width:55px;text-align:center"><a href="set_detail('@row["STOCK_CODE"]', '@row["STOCK_NAME"]', '@row["STOCK_REMARK"].ToString().Replace("\r\n", "　")'" data-toggle="modal" data-target="#detail-modal">@row["STOCK_CODE"]</a></td>
+
                 <td class="td_left" style="width:100px;text-align:left"><a href="@row["STOCK_URL"]" target="_blank">@row["STOCK_NAME"]</a></td>
                 <td>@row["TOTAL_AMT_C"]</td>
                 <td>@row["SALES_AMT_C"]</td>
@@ -92,7 +93,7 @@
                 <!--  EST_PER  -->
                 @if (Convert.ToDouble(row["EST_PER"].ToString()) <= 15 && Convert.ToDouble(row["EST_PER"].ToString()) > 0)
                 {
-                    <td style="background-color:lightgreen ">@row["EST_PER"]</td>
+                    <td style="background-color:lightgreen">@row["EST_PER"]</td>
                 }
                 else
                 {
@@ -155,3 +156,59 @@
         }
     </table>
 </div>
+
+<div id="detail-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="text-center mt-2 mb-4">
+                    <a href="index.html" class="text-success">
+                        <span>
+                            <img class="mr-2" src="../assets/images/logo-icon.png"
+                                 alt="" height="18"><img src="../assets/images/logo-text.png" alt=""
+                                                         height="18">
+                        </span>
+                    </a>
+                </div>
+                <form action="#" class="pl-3 pr-3">
+                    <div class="form-group">
+                        <label for="emailaddress1">종목코드</label>
+                        <input class="form-control" type="text" id="dtl_stock_code" >
+                    </div>
+                    <div class="form-group">
+                        <label for="password1">종목명</label>
+                        <input class="form-control" type="text" id="dtl_stock_name">
+                    </div>
+
+                    <div class="form-group text-center">
+                        <button class="btn btn-rounded btn-primary" type="submit">
+                            닫기
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+<script>
+    function set_detail(dtl_code, dtl_name, dtl_remark) {
+
+        alert(dtl_code);
+
+        var v_dtl_code = document.getElementById("dtl_stock_code");
+        var v_dtl_name = document.getElementById("dtl_stock_name");
+
+        /*
+        alert(v_reg_remark);
+        alert(reg_remark);
+        */
+        v_dtl_code.value = dtl_code;
+        v_dtl_name.value = dtl_name;
+
+        
+    }
+
+
+</script>

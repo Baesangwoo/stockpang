@@ -37,7 +37,8 @@ namespace StockPang.Models
             sSql += "   SELECT  STOCK_CODE, STOCK_NAME, STOCK_URL, TOTAL_AMT, SALES_AMT, BIZ_PROFIT, NET_PROFIT, PER, EST_PER, BIZ_PER, STOCK_PRICE, NAVER_PRICE, ";
             sSql += "           CAL_PSR, CAL_POR, CAL_PER, BIZ_RATE, NET_RATE, ";
             sSql += "           SA_Y3, SA_Y2, SA_Y1, SA_Y0, BP_Y3, BP_Y2, BP_Y1, BP_Y0, NP_Y3, NP_Y2, NP_Y1, NP_Y0, ";
-            sSql += "           SA_RATE, BP_RATE, NP_RATE ";
+            sSql += "           SA_RATE, BP_RATE, NP_RATE ,";
+            sSql += "           STOCK_REMARK ";
             sSql += "   FROM    STOCK_INFO";
             sSql += "   WHERE ( STOCK_CODE LIKE '%" + Search_name + "%'" + " OR STOCK_NAME LIKE '%" + Search_name + "%')";
             sSql += "   AND   ( STOCK_CLASS1 LIKE '%" + Search_class + "%'" + " OR STOCK_CLASS2 LIKE '%" + Search_class + "%')"; 
@@ -81,7 +82,8 @@ namespace StockPang.Models
             sSql += "   SELECT  STOCK_CODE, STOCK_NAME, STOCK_URL, TOTAL_AMT, SALES_AMT, BIZ_PROFIT, NET_PROFIT, PER, EST_PER, BIZ_PER, STOCK_PRICE, NAVER_PRICE, ";
             sSql += "           CAL_PSR, CAL_POR, CAL_PER, BIZ_RATE, NET_RATE, ";
             sSql += "           SA_Y3, SA_Y2, SA_Y1, SA_Y0, BP_Y3, BP_Y2, BP_Y1, BP_Y0, NP_Y3, NP_Y2, NP_Y1, NP_Y0, ";
-            sSql += "           SA_RATE, BP_RATE, NP_RATE ";
+            sSql += "           SA_RATE, BP_RATE, NP_RATE, ";
+            sSql += "           STOCK_REMARK ";
             sSql += "   FROM    STOCK_INFO";
             sSql += "   WHERE ( STOCK_CODE LIKE '%" + Search_name + "%'" + " OR STOCK_NAME LIKE '%" + Search_name + "%')";
             sSql += "   AND   ( STOCK_CLASS1 LIKE '%" + Search_class + "%'" + " OR STOCK_CLASS2 LIKE '%" + Search_class + "%')"; 

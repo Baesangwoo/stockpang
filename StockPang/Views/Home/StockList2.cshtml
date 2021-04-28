@@ -77,7 +77,17 @@
                     <td style="color:red">@row["NET_PROFIT_C"]</td>
                 }
 
-                <td>@row["CAL_PER"]</td>
+                <!--  CAL_PER : 계산 시총 / 순이익  -->
+                @if (Convert.ToDouble(row["CAL_PER"].ToString()) <= 15 && Convert.ToDouble(row["CAL_PER"].ToString()) >= 0)
+                {
+                    <td style="color: red; background-color: lightgreen">@row["CAL_PER"]</td>
+                }
+                else
+                {
+                    <td>@row["CAL_PER"]</td>
+                }
+
+
                 <td>@row["STOCK_PRICE"]</td>
                 <td>@row["NAVER_PRICE"]</td>
                 <td>@row["PRICE_GAP"]</td>
@@ -106,7 +116,7 @@
                 <!--  영업이익성장율 : 30이상 -->
                 @if (Convert.ToDouble(row["BP_RATE"].ToString()) >= 30 )
                 {
-                    <td style="color:red; background-color:cyan ">@row["BP_RATE"]</td>
+                    <td style="color: red; background-color: lightskyblue">@row["BP_RATE"]</td>
                 }
                 else
                 {
@@ -116,7 +126,7 @@
                 <!--  순이익성장율 : 30이상  -->
                 @if (Convert.ToDouble(row["NP_RATE"].ToString()) >= 30)
                 {
-                    <td style="color:red; background-color:cyan ">@row["NP_RATE"]</td>
+                    <td style="color: red; background-color: lightskyblue">@row["NP_RATE"]</td>
                 }
                 else
                 {
