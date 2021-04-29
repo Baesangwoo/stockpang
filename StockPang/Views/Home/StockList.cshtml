@@ -54,7 +54,7 @@
         @foreach (DataRow row in Model.Tables[0].Rows)
         {
             <tr>
-                <td class="td_center" style="width:55px;text-align:center"><a href="set_detail('@row["STOCK_CODE"]', '@row["STOCK_NAME"]', '@row["STOCK_REMARK"].ToString().Replace("\r\n", "　")'" data-toggle="modal" data-target="#detail-modal">@row["STOCK_CODE"]</a></td>
+                <td class="td_center" style="width:55px;text-align:center"><a href="#" class="stockdetail" data-stockcode="@row["STOCK_CODE"]" data-stockname="@row["STOCK_NAME"]" data-stockremark="@row["STOCK_REMARK"].ToString().Replace("\r\n", "　")" data-toggle="modal" data-target="#detail-modal">@row["STOCK_CODE"]</a></td>
 
                 <td class="td_left" style="width:100px;text-align:left"><a href="@row["STOCK_URL"]" target="_blank">@row["STOCK_NAME"]</a></td>
                 <td>@row["TOTAL_AMT_C"]</td>
@@ -157,10 +157,12 @@
     </table>
 </div>
 
-<div id="detail-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+
+<div id="detail-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" style="font-size:75%">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-body">
+
                 <div class="text-center mt-2 mb-4">
                     <a href="index.html" class="text-success">
                         <span>
@@ -170,20 +172,24 @@
                         </span>
                     </a>
                 </div>
+
                 <form action="#" class="pl-3 pr-3">
                     <div class="form-group">
-                        <label for="emailaddress1">종목코드</label>
-                        <input class="form-control" type="text" id="dtl_stock_code" >
+                        <label>종목코드</label>
+                        <input class="form-control" type="text" id="dtl_stock_code">
                     </div>
                     <div class="form-group">
-                        <label for="password1">종목명</label>
+                        <label>종목명</label>
                         <input class="form-control" type="text" id="dtl_stock_name">
                     </div>
+                    <div class="form-group">
+                        <label>기업내용</label>
+                        <textarea class="form-control" id="dtl_stock_remark" rows="5" cols="50"></textarea>
+                    </div>
+
 
                     <div class="form-group text-center">
-                        <button class="btn btn-rounded btn-primary" type="submit">
-                            닫기
-                        </button>
+                        <button class="btn btn-rounded btn-primary" data-dismiss="modal">닫기</button>
                     </div>
                 </form>
             </div>
@@ -192,23 +198,36 @@
 </div><!-- /.modal -->
 
 
+
 <script>
-    function set_detail(dtl_code, dtl_name, dtl_remark) {
+    
+    var sStockCode = "";
+    var sStockName = "";
+    var NCONTENT = "";
 
-        alert(dtl_code);
+    $(document).ready(function () {
+        $(document).on("click", '.stockdetail', function () {
+            sStockCode = $(this).data('stockcode');
+            sStockName = $(this).data('stockname');
+            sStockRemark = $(this).data('stockremark');
 
-        var v_dtl_code = document.getElementById("dtl_stock_code");
-        var v_dtl_name = document.getElementById("dtl_stock_name");
+            //alert(sStockCode);
+            //alert(sStockName);
 
-        /*
-        alert(v_reg_remark);
-        alert(reg_remark);
-        */
-        v_dtl_code.value = dtl_code;
-        v_dtl_name.value = dtl_name;
+            var v_dtl_code = document.getElementById("dtl_stock_code");
+            var v_dtl_name = document.getElementById("dtl_stock_name");
+            var v_dtl_remark = document.getElementById("dtl_stock_remark");
 
-        
-    }
+            var str = sStockRemark;
+            v_dtl_remark.value = str.replace(/　/gi, '\r\n');
 
 
+            v_dtl_code.value = sStockCode;
+            v_dtl_name.value = sStockName;
+
+
+        });
+    });
 </script>
+
+

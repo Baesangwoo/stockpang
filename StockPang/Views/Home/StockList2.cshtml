@@ -55,7 +55,9 @@
         @foreach (DataRow row in Model.Tables[0].Rows)
         {
             <tr>
-                <td class="td_center" style="width:55px;text-align:center">@row["STOCK_CODE"]</td>
+                <td class="td_center" style="width:55px;text-align:center"><a href="#" class="stockdetail" data-stockcode="@row["STOCK_CODE"]" data-stockname="@row["STOCK_NAME"]" data-stockremark="@row["STOCK_REMARK"].ToString().Replace("\r\n", "　")" data-toggle="modal" data-target="#detail-modal">@row["STOCK_CODE"]</a></td>
+
+
                 <td class="td_left" style="width:100px;text-align:left"><a href="@row["STOCK_URL"]" target="_blank">@row["STOCK_NAME"]</a></td>
                 <td>@row["TOTAL_AMT_C"]</td>
                 <td>@row["SALES_AMT_C"]</td>
@@ -95,7 +97,7 @@
                 <!--  PRICE_GAP_RATE  -->
                 @if (Convert.ToDouble(row["PRICE_GAP_RATE"].ToString()) >= 30 || Convert.ToDouble(row["PRICE_GAP_RATE"].ToString()) <= -30)
                 {
-                    <td style="background-color:lightgreen">@row["PRICE_GAP_RATE"]</td>
+                    <td style="color: red; background-color: lightgreen">@row["PRICE_GAP_RATE"]</td>
                 }
                 else
                 {
@@ -138,3 +140,77 @@
         }
     </table>
 </div>
+
+
+<div id="detail-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" style="font-size:75%">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+
+                <div class="text-center mt-2 mb-4">
+                    <a href="index.html" class="text-success">
+                        <span>
+                            <img class="mr-2" src="../assets/images/logo-icon.png"
+                                 alt="" height="18"><img src="../assets/images/logo-text.png" alt=""
+                                                         height="18">
+                        </span>
+                    </a>
+                </div>
+
+                <form action="#" class="pl-3 pr-3">
+                    <div class="form-group">
+                        <label>종목코드</label>
+                        <input class="form-control" type="text" id="dtl_stock_code">
+                    </div>
+                    <div class="form-group">
+                        <label>종목명</label>
+                        <input class="form-control" type="text" id="dtl_stock_name">
+                    </div>
+                    <div class="form-group">
+                        <label>기업내용</label>
+                        <textarea class="form-control" id="dtl_stock_remark" rows="5" cols="50"></textarea>
+                    </div>
+
+
+                    <div class="form-group text-center">
+                        <button class="btn btn-rounded btn-primary" data-dismiss="modal">닫기</button>
+                    </div>
+                </form>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+
+<script>
+
+    var sStockCode = "";
+    var sStockName = "";
+    var NCONTENT = "";
+
+    $(document).ready(function () {
+        $(document).on("click", '.stockdetail', function () {
+            sStockCode = $(this).data('stockcode');
+            sStockName = $(this).data('stockname');
+            sStockRemark = $(this).data('stockremark');
+
+            //alert(sStockCode);
+            //alert(sStockName);
+
+            var v_dtl_code = document.getElementById("dtl_stock_code");
+            var v_dtl_name = document.getElementById("dtl_stock_name");
+            var v_dtl_remark = document.getElementById("dtl_stock_remark");
+
+            var str = sStockRemark;
+            v_dtl_remark.value = str.replace(/　/gi, '\r\n');
+
+            v_dtl_code.value = sStockCode;
+            v_dtl_name.value = sStockName;
+
+
+        });
+    });
+</script>
+
+
