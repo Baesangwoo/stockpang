@@ -208,6 +208,36 @@ namespace StockPang.Controllers
             return View();
         }
 
+        public class modelChartData
+        {
+            public string INDEX_DATE;
+            public string INDEX_POINT;
+            public string INDEX_START;
+            public string INDEX_HIGH;
+            public string INDEX_LOW;
+        }
+
+        public ActionResult GetChart()
+        {
+
+            DataSet model = modelChart.GetKospi();
+
+            List<modelChartData> List = new List<modelChartData>();
+
+            for (int iloopCount = 0; iloopCount < model.Tables[0].Rows.Count; iloopCount++)
+            {
+                modelChartData data = new modelChartData();
+                data.INDEX_DATE = model.Tables[0].Rows[iloopCount]["INDEX_DATE"].ToString();
+                data.INDEX_POINT = model.Tables[0].Rows[iloopCount]["INDEX_POINT"].ToString();
+                data.INDEX_START = model.Tables[0].Rows[iloopCount]["INDEX_START"].ToString();
+                data.INDEX_HIGH = model.Tables[0].Rows[iloopCount]["INDEX_HIGH"].ToString();
+                data.INDEX_LOW = model.Tables[0].Rows[iloopCount]["INDEX_LOW"].ToString();
+
+                List.Add(data);
+            }
+
+            return Json(List, JsonRequestBehavior.AllowGet);
+        }
 
         public ActionResult GetValue()
         {

@@ -164,24 +164,26 @@
                     </a>
                 </div>
 
-                <form action="#" class="pl-3 pr-3">
+
+                <form action="RemarkSave" class="pl-3 pr-3">
                     <div class="form-group">
                         <label>종목코드</label>
-                        <input class="form-control" type="text" id="dtl_stock_code">
+                        <input class="form-control" type="text" name="dtl_stock_code" id="dtl_stock_code">
                     </div>
                     <div class="form-group">
                         <label>종목명</label>
-                        <input class="form-control" type="text" id="dtl_stock_name">
+                        <input class="form-control" type="text" name="dtl_stock_name" id="dtl_stock_name">
                     </div>
                     <div class="form-group">
                         <label>기업내용</label>
-                        <textarea class="form-control" id="dtl_stock_remark" rows="5" cols="50"></textarea>
+                        <textarea class="form-control" name="dtl_stock_remark" id="dtl_stock_remark" rows="5" cols="50"></textarea>
                     </div>
 
-                    <input type="hidden" name="ViewName" value="StockList2" _ />
+
+                    <input type="hidden" name="ViewName" value="StockList2" />
                     <div class="form-group text-center">
                         <button class="btn btn-rounded btn-primary" data-dismiss="modal">닫기</button>
-                        <button class="btn btn-rounded btn-primary" data-dismiss="modal" type="submit">저장</button>
+                        <button class="btn btn-rounded btn-primary" type="submit">저장</button>
                     </div>
                 </form>
             </div>

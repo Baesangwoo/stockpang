@@ -2,6 +2,13 @@
     ViewBag.Title = "Index";
 }
 
+<!-- Resources -->
+<script src="https://cdn.amcharts.com/lib/4/core.js"></script>
+<script src="https://cdn.amcharts.com/lib/4/charts.js"></script>
+<script src="https://cdn.amcharts.com/lib/4/themes/animated.js"></script>
+
+<!-- Chart code -->
+
 
     <label>삼성전자 현재 주가 :</label>
     <label id="SS_VALUE">@ViewBag.Value</label>
@@ -25,12 +32,16 @@
         코스피Graph 
 
     </b>
-    <div id="cospi-graph" style="background-color:grey; width:300px; height:200px;">
 
+    <div id="chartdiv"></div>
 
-
-    </div>
-
+    <!-- Styles -->
+    <style>
+        #chartdiv {
+            width: 50%;
+            height: 400px;
+        }
+    </style>
     <br />
     <br />
 
@@ -54,3 +65,126 @@
             }
         }, 1000);
     </script>
+
+
+<script>
+    $(document).ready(function () {
+        $.ajax({
+            type: "GET",
+            url: "/Home/GetChart/",
+            data: {},
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                successFunc(response);
+            },
+            error: function (error) {
+                alert('Error!');
+            }
+        });
+        function successFunc(jsondata) {
+
+            var arry = jsondata;
+
+
+            var arryDate = new Array();
+            var arryPoint = new Array();
+            var arryStart = new Array();
+            var arryHigh = new Array();
+            var arryLow = new Array();
+
+            for (idx in arry) {
+                arryDate.push(arry[idx].INDEX_DATE);
+                //alert(arryDate);
+                arryPoint.push(arry[idx].INDEX_POINT);
+                //alert(arryPoint);
+                arryStart.push(arry[idx].INDEX_START);
+                //alert(arryStart);
+                arryHigh.push(arry[idx].INDEX_HIGH);
+                //alert(arryHigh);
+                arryLow.push(arry[idx].INDEX_LOW);
+                //alert(arryLow);
+            }
+
+
+            // Themes begin
+            am4core.useTheme(am4themes_animated);
+            // Themes end
+
+            var chart = am4core.create("chartdiv", am4charts.XYChart);
+            chart.paddingRight = 20;
+
+            chart.dateFormatter.inputDateFormat = "yyyy-MM-dd";
+
+            var dateAxis = chart.xAxes.push(new am4charts.DateAxis());
+            dateAxis.renderer.grid.template.location = 0;
+
+            var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+            valueAxis.tooltip.disabled = true;
+
+            var series = chart.series.push(new am4charts.CandlestickSeries());
+
+            series.dropFromOpenState.properties.fill = am4core.color("blue");
+            series.dropFromOpenState.properties.stroke = am4core.color("blue");
+            series.riseFromOpenState.properties.fill = am4core.color("red");
+            series.riseFromOpenState.properties.stroke = am4core.color("red");
+
+            series.dataFields.dateX = "INDEX_DATE";
+            series.dataFields.valueY = "INDEX_POINT";
+            series.dataFields.openValueY = "INDEX_START";
+            series.dataFields.lowValueY = "INDEX_LOW";
+            series.dataFields.highValueY = "INDEX_HIGH";
+            series.simplifiedProcessing = true;
+            series.tooltipText = "Open:{openValueY.value}\nLow:{lowValueY.value}\nHigh:{highValueY.value}\nClose:{valueY.value}";
+
+            chart.cursor = new am4charts.XYCursor();
+
+            // a separate series for scrollbar
+            var lineSeries = chart.series.push(new am4charts.LineSeries());
+            lineSeries.dataFields.dateX = "INDEX_DATE";
+            lineSeries.dataFields.valueY = "INDEX_START";
+            // need to set on default state, as initially series is "show"
+            lineSeries.defaultState.properties.visible = false;
+
+            // hide from legend too (in case there is one)
+            lineSeries.hiddenInLegend = true;
+            lineSeries.fillOpacity = 0.5;
+            lineSeries.strokeOpacity = 0.5;
+
+            var scrollbarX = new am4charts.XYChartScrollbar();
+            scrollbarX.series.push(lineSeries);
+            chart.scrollbarX = scrollbarX;
+
+            chart.data = jsondata;
+
+
+            //var ctx = document.getElementById('Grape');
+
+            //var chartOptions = {
+            //    legend: {
+            //        display: false
+            //    }
+            //};
+
+
+            //var chart = new Chart(ctx, {
+            //    // The type of chart we want to create
+            //    type: 'line',
+
+            //    // The data for our dataset
+            //    data: {
+            //        labels: arryLabel,
+            //        datasets: [{
+            //            label: "그래프",
+            //            backgroundColor: 'rgb(255, 255, 255)',
+            //            borderColor: 'rgb(255, 99, 132)',
+            //            data: arryvalues
+            //        }]
+            //    },
+
+            //    // Configuration options go here
+            //    options: chartOptions
+            //});
+        }
+    });
+</script>
