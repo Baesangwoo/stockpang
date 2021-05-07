@@ -170,6 +170,15 @@ namespace StockPang.Controllers
             return View(data);
         }
 
+        public ActionResult RemarkSave(string dtl_stock_code, string dtl_stock_remark, string ViewName)
+        {
+            DataSet data = null;
+
+            modelStockList.SetRemarkSave(dtl_stock_code, dtl_stock_remark);
+
+            return Redirect(ViewName);
+        }
+
 
         public ActionResult StockInsert(string Reg_Code, string Reg_Name, string Reg_Remark)
         {

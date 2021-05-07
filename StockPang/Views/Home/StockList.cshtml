@@ -54,8 +54,16 @@
         @foreach (DataRow row in Model.Tables[0].Rows)
         {
             <tr>
+                @if (Convert.ToDouble(row["REMARK_LEN"].ToString()) == 0) 
+                {
                 <td class="td_center" style="width:55px;text-align:center"><a href="#" class="stockdetail" data-stockcode="@row["STOCK_CODE"]" data-stockname="@row["STOCK_NAME"]" data-stockremark="@row["STOCK_REMARK"].ToString().Replace("\r\n", "　")" data-toggle="modal" data-target="#detail-modal">@row["STOCK_CODE"]</a></td>
-
+                }
+                else {
+                <td class="td_center" style="width: 55px; text-align: center"><a href="#" class="stockdetail" style="color:red" data-stockcode="@row["STOCK_CODE"]" data-stockname="@row["STOCK_NAME"]" data-stockremark="@row["STOCK_REMARK"].ToString().Replace("\r\n", "　")" data-toggle="modal" data-target="#detail-modal">@row["STOCK_CODE"]</a></td>
+                }
+                
+                
+                
                 <td class="td_left" style="width:100px;text-align:left"><a href="@row["STOCK_URL"]" target="_blank">@row["STOCK_NAME"]</a></td>
                 <td>@row["TOTAL_AMT_C"]</td>
                 <td>@row["SALES_AMT_C"]</td>
@@ -173,23 +181,25 @@
                     </a>
                 </div>
 
-                <form action="#" class="pl-3 pr-3">
+                <form action="RemarkSave" class="pl-3 pr-3">
                     <div class="form-group">
                         <label>종목코드</label>
-                        <input class="form-control" type="text" id="dtl_stock_code">
+                        <input class="form-control" type="text" name="dtl_stock_code" id="dtl_stock_code">
                     </div>
                     <div class="form-group">
                         <label>종목명</label>
-                        <input class="form-control" type="text" id="dtl_stock_name">
+                        <input class="form-control" type="text" name="dtl_stock_name" id="dtl_stock_name">
                     </div>
                     <div class="form-group">
                         <label>기업내용</label>
-                        <textarea class="form-control" id="dtl_stock_remark" rows="5" cols="50"></textarea>
+                        <textarea class="form-control" name="dtl_stock_remark" id="dtl_stock_remark" rows="5" cols="50"></textarea>
                     </div>
 
-
+                    <input type="hidden"  name="ViewName" value="StockList"_/>
                     <div class="form-group text-center">
+
                         <button class="btn btn-rounded btn-primary" data-dismiss="modal">닫기</button>
+                        <button class="btn btn-rounded btn-primary" data-dismiss="modal" type="submit">저장</button>
                     </div>
                 </form>
             </div>

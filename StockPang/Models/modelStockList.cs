@@ -38,7 +38,7 @@ namespace StockPang.Models
             sSql += "           CAL_PSR, CAL_POR, CAL_PER, BIZ_RATE, NET_RATE, ";
             sSql += "           SA_Y3, SA_Y2, SA_Y1, SA_Y0, BP_Y3, BP_Y2, BP_Y1, BP_Y0, NP_Y3, NP_Y2, NP_Y1, NP_Y0, ";
             sSql += "           SA_RATE, BP_RATE, NP_RATE ,";
-            sSql += "           B.STOCK_REMARK ";
+            sSql += "           B.STOCK_REMARK, ISNULL(LEN(B.STOCK_REMARK),0) as REMARK_LEN  ";
             sSql += "   FROM    STOCK_INFO  A";
             sSql += "       ,   STOCK_CLASS B";
             sSql += "   WHERE   A.STOCK_CODE = B.STOCK_CODE ";
@@ -85,7 +85,7 @@ namespace StockPang.Models
             sSql += "           CAL_PSR, CAL_POR, CAL_PER, BIZ_RATE, NET_RATE, ";
             sSql += "           SA_Y3, SA_Y2, SA_Y1, SA_Y0, BP_Y3, BP_Y2, BP_Y1, BP_Y0, NP_Y3, NP_Y2, NP_Y1, NP_Y0, ";
             sSql += "           SA_RATE, BP_RATE, NP_RATE, ";
-            sSql += "           B.STOCK_REMARK ";
+            sSql += "           B.STOCK_REMARK, ISNULL(LEN(B.STOCK_REMARK),0) as REMARK_LEN ";
             sSql += "   FROM    STOCK_INFO  A";
             sSql += "       ,   STOCK_CLASS B";
             sSql += "   WHERE   A.STOCK_CODE = B.STOCK_CODE ";
@@ -208,6 +208,25 @@ namespace StockPang.Models
             }
             
             return result;
+
+        }
+
+        public static DataSet SetRemarkSave(string Stock_Code, string Stock_Remark)
+        {
+
+            string sSql = @"";
+            sSql += "   UPDATE STOCK_CLASS ";
+            sSql += "     SET  STOCK_REMARK = '" + Stock_Remark + "'";
+            sSql += "   WHERE STOCK_CODE = '" + Stock_Code + "'";
+
+            DataSet user;
+
+            using (var db = new MSSQLDB())
+            {
+                user = db.Query(sSql);
+            }
+
+            return user;
 
         }
 
