@@ -185,6 +185,7 @@
         <!-- ============================================================== -->
     </div>
 
+    <!--# 로그인 화면 --> 
     <div id="login-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -200,30 +201,38 @@
                     </div>
                     <form action="#" class="pl-3 pr-3">
                         <div class="form-group">
-                            <label for="emailaddress1">Email address</label>
-                            <input class="form-control" type="email" id="emailaddress1"
-                                   required="" placeholder="john@deo.com">
+                            <label for="loginid">Login ID</label>
+                            <input class="form-control" type="text" id="loginid"
+                                   required="" placeholder="아이디를 넣어세요">
                         </div>
                         <div class="form-group">
                             <label for="password1">Password</label>
                             <input class="form-control" type="password" required=""
-                                   id="password1" placeholder="Enter your password">
+                                   id="password1" placeholder="패스워드를 넣어세요">
                         </div>
                         <div class="form-group">
                             <div class="custom-control custom-checkbox">
                                 <input type="checkbox" class="custom-control-input"
                                        id="customCheck2">
                                 <label class="custom-control-label"
-                                       for="customCheck2">Remember me</label>
+                                       for="customCheck2">아이디 기억</label>
                             </div>
                         </div>
                         <div class="form-group text-center">
                             <button class="btn btn-rounded btn-primary" type="submit">
-                                Sign
-                                In
+                                로그인
                             </button>
                         </div>
                     </form>
+
+                    <form action="#" class="pl-5 pr-5">
+                        <div style="font-size:small">
+                            <label>회원이 아니시면? </label>
+                            <a href="#">회원가입</a>  
+                        </div>
+
+                    </form>
+
                 </div>
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->

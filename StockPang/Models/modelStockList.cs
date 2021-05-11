@@ -158,7 +158,7 @@ namespace StockPang.Models
 
         }
 
-        public static int SetStockInsert(string Reg_Code, string Reg_Name, string Reg_Remark)
+        public static int SetStockInsert(string Reg_Code, string Reg_Name, string Reg_Class1, string Reg_Class2, string Reg_Remark)
         {
 
             string sSql = @"";
@@ -182,7 +182,9 @@ namespace StockPang.Models
 
             sSql = @"";
             sSql += "   UPDATE STOCK_CLASS  ";
-            sSql += "   SET    STOCK_REMARK = '" + Reg_Remark + "'"; ;
+            sSql += "   SET    STOCK_REMARK = '" + Reg_Remark + "',"; 
+            sSql += "          STOCK_CLASS1 = '" + Reg_Class1 + "',";
+            sSql += "          STOCK_CLASS2 = '" + Reg_Class2 + "'";
             sSql += "   FROM   STOCK_CLASS A ";
             sSql += "   WHERE   A.STOCK_CODE = '" + Reg_Code + "'";
 

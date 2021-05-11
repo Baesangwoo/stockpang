@@ -180,11 +180,11 @@ namespace StockPang.Controllers
         }
 
 
-        public ActionResult StockInsert(string Reg_Code, string Reg_Name, string Reg_Remark)
+        public ActionResult StockInsert(string Reg_Code, string Reg_Name, string Reg_Class1, string Reg_Class2, string Reg_Remark)
         {
             DataSet data = null;
 
-            modelStockList.SetStockInsert(Reg_Code, Reg_Name, Reg_Remark);
+            modelStockList.SetStockInsert(Reg_Code, Reg_Name, Reg_Class1, Reg_Class2, Reg_Remark);
 
 
             return Redirect("StockReg");
@@ -255,6 +255,7 @@ namespace StockPang.Controllers
             var jsonData = json;
             return Json(jsonData, JsonRequestBehavior.AllowGet);
         }
+
 
     }
 
