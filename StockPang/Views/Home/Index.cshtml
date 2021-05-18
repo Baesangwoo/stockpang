@@ -16,14 +16,14 @@
     <br />
 
     <table>  
-        <tr> <td> << 스톡팡 투자 원칙 : 마음의 평온 >> </tr>
-        <tr><td>     1. 욕심을 줄여라.         </td></tr>     
-        <tr><td>     2. 좋은 종목을 골라라.    </td></tr>    
-        <tr><td>     3. 시장의 흐름을 타라.    </td></tr>    
-        <tr><td>     4. 현금을 비축하라.       </td></tr>    
-        <tr><td>     5. 천천히 사고 팔아라.    </td></tr>    
-        <tr><td>     그리고, 돈을 잃지 마라.    </td></tr>
-        <tr> <td> </td></tr>            
+        <tr><td><font color="blue" size="4"> << 스톡팡 투자 원칙 : 마음의 평온 >> </font></td></tr>
+        <tr><td>     1. <font color="blue">욕심을 줄여라</font> : 년 목표 수익을 6%~10% 정도로 잡아야 위험한 거래를 하지 않는다. </td></tr>     
+        <tr><td>     2. <font color="blue">좋은 종목을 골라라</font> : 망하지 않을 기업, 혁신을 만드는 기업. 섹터별로 2~3개 종목으로 총 10~15개 종목  </td></tr>    
+        <tr><td>     3. <font color="blue">시장의 흐름을 타라</font> : 증시의 상단, 하단을 크게 설정하고 매수, 매도를 결정하라.  </td></tr>    
+        <tr><td>     4. <font color="blue">현금을 비축하라</font> : 총 투자금액의 30% 내외의 현금을 유지하라. 폭락 시에도 웃는다. </td></tr>    
+        <tr><td>     5. <font color="blue">천천히 사고 팔아라</font> : 20%씩 나누어서 사고, 30%씩 나누어서 팔아라. 증시는 내일도 열린다. </td></tr>    
+        <tr><td>     그리고, <font color="red">소중한 돈을 잃지 마라.</font>  </td></tr>
+        <tr><td> </td></tr>            
     </table>
 
     <b>
@@ -38,7 +38,7 @@
     <!-- Styles -->
     <style>
         #chartdiv {
-            width: 50%;
+            width: 100%;
             height: 400px;
         }
     </style>
@@ -135,7 +135,8 @@
             series.dataFields.lowValueY = "INDEX_LOW";
             series.dataFields.highValueY = "INDEX_HIGH";
             series.simplifiedProcessing = true;
-            series.tooltipText = "Open:{openValueY.value}\nLow:{lowValueY.value}\nHigh:{highValueY.value}\nClose:{valueY.value}";
+            //series.tooltipText = "Open:{openValueY.value}\nLow:{lowValueY.value}\nHigh:{highValueY.value}\nClose:{valueY.value}";
+            series.tooltipText = "Open:{openValueY.value}\nClose:{valueY.value}";
 
             chart.cursor = new am4charts.XYCursor();
 
