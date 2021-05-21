@@ -200,6 +200,15 @@ namespace StockPang.Controllers
             return Redirect("StockReg");
         }
 
+        public ActionResult AvgKospi()
+        {
+            DataSet data = null;
+
+            data = modelChart.AvgKospi();
+   
+            return Json(data.Tables[0].Rows[0]["AVG_POINT"].ToString(), JsonRequestBehavior.AllowGet);
+        }
+
 
 
         public ActionResult StockDetail()

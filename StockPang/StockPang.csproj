@@ -136,7 +136,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\image\스톡팡로고.png" />
+    <Content Include="Content\image\StockPanf_Logo_PD.png" />
+    <Content Include="Content\image\StockPanf_Logo_PR.png" />
+    <Content Include="Content\image\StockPang_Logo_c.png" />
     <Content Include="Content\lib\adminmart-lite\assets\extra-libs\c3\c3.min.css" />
     <Content Include="Content\lib\adminmart-lite\assets\extra-libs\c3\c3.min.js" />
     <Content Include="Content\lib\adminmart-lite\assets\extra-libs\c3\d3.min.js" />

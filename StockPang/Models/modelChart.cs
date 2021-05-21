@@ -27,5 +27,30 @@ namespace StockPang.Models
 
             return user;
         }
+
+        public static DataSet AvgKospi()
+        {
+
+            string sSql = @"";
+            sSql += " SELECT ROUND(AVG(INDEX_POINT),2) AVG_POINT ";
+            sSql += " FROM   ( " ; 
+            sSql += "        SELECT  TOP 45	ISNULL(INDEX_POINT,0) INDEX_POINT";
+            sSql += "        FROM	INDEX_POINT";
+            sSql += "        WHERE	STOCK_MARKET	=	'KOSPI'";
+            sSql += "        ORDER BY INDEX_DATE DESC ";
+            sSql += "        ) A";
+
+            DataSet user;
+
+            using (var db = new MSSQLDB())
+            {
+                user = db.Query(sSql);
+            }
+
+            return user;
+        }
+
+
+
     }
 }
