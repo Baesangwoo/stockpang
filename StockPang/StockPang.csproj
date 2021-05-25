@@ -127,6 +127,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="DataBase\MSSQLDB.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -136,9 +137,12 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\image\Login_1.jpeg" />
+    <Content Include="Content\image\Login_2.jpeg" />
     <Content Include="Content\image\StockPanf_Logo_PD.png" />
     <Content Include="Content\image\StockPanf_Logo_PR.png" />
     <Content Include="Content\image\StockPang_Logo_c.png" />
+    <Content Include="Content\image\StockPang_Logo_P.png" />
     <Content Include="Content\lib\adminmart-lite\assets\extra-libs\c3\c3.min.css" />
     <Content Include="Content\lib\adminmart-lite\assets\extra-libs\c3\c3.min.js" />
     <Content Include="Content\lib\adminmart-lite\assets\extra-libs\c3\d3.min.js" />
@@ -874,6 +878,8 @@
     <Content Include="Views\Home\StockDetail.cshtml" />
     <Content Include="Views\Home\StockList2.cshtml" />
     <Content Include="Views\Home\StockReg.cshtml" />
+    <Content Include="Views\Login\Login.cshtml" />
+    <Content Include="Views\Login\Register.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

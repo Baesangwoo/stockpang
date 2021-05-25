@@ -200,13 +200,28 @@ namespace StockPang.Controllers
             return Redirect("StockReg");
         }
 
+        public class modelAvgKospi
+        {
+            public string AVG_INDEX;
+        }
+
         public ActionResult AvgKospi()
         {
-            DataSet data = null;
+            DataSet model = null;
 
-            data = modelChart.AvgKospi();
-   
-            return Json(data.Tables[0].Rows[0]["AVG_POINT"].ToString(), JsonRequestBehavior.AllowGet);
+            model = modelChart.AvgKospi();
+            List<modelAvgKospi> List = new List<modelAvgKospi>();
+
+            for (int iloopCount = 0; iloopCount < model.Tables[0].Rows.Count; iloopCount++)
+            {
+                modelAvgKospi data = new modelAvgKospi();
+                data.AVG_INDEX = model.Tables[0].Rows[iloopCount]["AVG_POINT"].ToString();
+
+                List.Add(data);
+            }
+
+            return Json(List, JsonRequestBehavior.AllowGet);
+
         }
 
 
@@ -262,6 +277,22 @@ namespace StockPang.Controllers
             //Stock_Money pObj = JsonConvert.DeserializeObject<Stock_Money>(jsonString);
 
             var jsonData = json;
+            return Json(jsonData, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult GetRealTimeKospi()
+        {
+            WebClient wc = new WebClient();
+            wc.Encoding = Encoding.UTF8;
+
+            string html = wc.DownloadString("https://finance.naver.com/");
+            string json = JsonExport.Between(html, "<div class=\"heading_area\"> ", "</div>");
+            json = JsonExport.Between(json, "<span class=\"num\">", "</span>");
+
+            var jsonData = json.Replace(",", "");
+
+            modelChart.SetKospiPoint(jsonData);
+
             return Json(jsonData, JsonRequestBehavior.AllowGet);
         }
 

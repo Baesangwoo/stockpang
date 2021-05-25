@@ -12,32 +12,53 @@
 
 <!-- <img src="~/Content/image/StockPanf_Logo_PR.png" class="dark-logo" style="width:190px; height:65px" /> <br />  -->
 <!-- <img src="~/Content/image/StockPanf_Logo_PD.png" class="dark-logo" style="width:190px; height:65px" /> <br />  -->
-
+<!--
     <label>삼성전자 현재 주가 :</label>
     <label id="SS_VALUE">@ViewBag.Value</label>
     <br />
     <br />
-
+-->
     <table>  
         <tr><td><font color="blue" size="4"> << 스톡팡 투자 원칙 : 마음의 평온 >> </font></td></tr>
-        <tr><td>     1. <font color="blue">욕심을 줄여라</font> : 년 목표 수익을 6%~10% 정도로 잡아야 위험한 거래를 하지 않는다. </td></tr>     
-        <tr><td>     2. <font color="blue">좋은 종목을 골라라</font> : 망하지 않을 기업, 혁신을 만드는 기업. 섹터별로 2~3개 종목으로 총 10~15개 종목  </td></tr>    
-        <tr><td>     3. <font color="blue">시장의 흐름을 타라</font> : 증시의 상단, 하단을 크게 설정하고 매수, 매도를 결정하라.  </td></tr>    
-        <tr><td>     4. <font color="blue">현금을 비축하라</font> : 총 투자금액의 30% 내외의 현금을 유지하라. 폭락 시에도 웃는다. </td></tr>    
-        <tr><td>     5. <font color="blue">천천히 사고 팔아라</font> : 20%씩 나누어서 사고, 30%씩 나누어서 팔아라. 증시는 내일도 열린다. </td></tr>    
-        <tr><td>     그리고, <font color="red">소중한 돈을 잃지 마라.</font>  </td></tr>
-        <tr><td> </td></tr>            
     </table>
 
+    <table style="font-size:95%">
+        <tr><td>     1. <font color="blue">욕심을 줄여라</font> : 년 목표 수익을 6%~10% 정도로 잡아야 위험한 거래를 하지 않는다. </td></tr>
+        <tr><td>     2. <font color="blue">좋은 종목을 골라라</font> : 망하지 않을 기업, 혁신을 만드는 기업. 섹터별로 2~3개 종목으로 총 10~15개 종목  </td></tr>
+        <tr><td>     3. <font color="blue">시장의 흐름을 타라</font> : 증시의 상단, 하단을 크게 설정하고 매수, 매도를 결정하라.  </td></tr>
+        <tr><td>     4. <font color="blue">현금을 비축하라</font> : 총 투자금액의 30% 내외의 현금을 유지하라. 폭락 시에도 웃는다. </td></tr>
+        <tr><td>     5. <font color="blue">천천히 사고 팔아라</font> : 20%씩 나누어서 사고, 30%씩 나누어서 팔아라. 증시는 내일도 열린다. </td></tr>
+        <tr><td>     그리고, <font color="red">소중한 돈을 잃지 마라.</font>  </td></tr>
+        <tr><td> </td></tr>
+    </table>
+    <br />
+    <table>
+        <tr><td>코스피Graph</td></tr>
+        <tr><td>현재 코스피 지수:</td> <td id="KOSPI_NOW"> </td> <td>&nbsp</td> <td>어제 코스피 지수:</td> <td id="KOSPI_YD"> </td>  </tr>
+    </table>
+    <table>
+        <tr><td>평균 코스피 지수(60일):</td> <td id="KOSPI_AVG"> </td> </tr>
+    </table>
+    <table style="font-size:85%">
+        <tr>
+            <td>지수상단목표(3.5%):</td>
+            <td id="KOSPI_VALUE_H" style="color:red">  </td>
+            <td>&nbsp&nbsp</td>
+            <td>지수하단목표(3.5%):</td>
+            <td id="KOSPI_VALUE_L" style="color:blue">  </td>
+        </tr>
+    </table>
+
+<!--
     <b>
         <br />
-        <br />
-        코스피Graph &nbsp&nbsp&nbsp <br />
-        <label>평균 코스피 지수(45일) :</label>  <label id="KOSPI_VALUE"> </label> &nbsp&nbsp&nbsp
-        <label>코스피 지수 상단 :</label>  <label id="KOSPI_VALUE_H" style="color:red" > </label> &nbsp&nbsp&nbsp
-        <label>코스피 지수 하단 :</label>  <label id="KOSPI_VALUE_L" style="color:blue"> </label> &nbsp&nbsp&nbsp
+        <label>코스피Graph</label>  <br />
+        <label>평균 코스피 지수(60일):</label>  <label id="KOSPI_VALUE"> </label> <br />
+        <label>지수상단목표(3.5%):</label>  <label id="KOSPI_VALUE_H" style="color:red"> </label> &nbsp&nbsp
+        <label>지수하단목표(3.5%):</label>  <label id="KOSPI_VALUE_L" style="color:blue"> </label>
 
     </b>
+-->
 
     <div id="chartdiv"></div>
 
@@ -51,8 +72,7 @@
     <br />
     <br />
 
-
-
+<!--
     <script>
         setInterval(function () {
             $.ajax({
@@ -71,45 +91,90 @@
             }
         }, 1000);
     </script>
+-->
 
-<script>
-    $(document).ready(function () {
+    <!-- 현재 KOSPI 지수 가져오기 -->
+    <script>
+        $(document).ready(function () {
         $.ajax({
             type: "GET",
-            url: "/Home/AvgKospi/",
+            url: "/Home/GetRealTimeKospi",
             data: {},
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (response) {
-                successFunc1(response);
+                successFuncKospi(response);
             },
-            error: function (error) {
-                alert('Error!');
-            }
         });
+        function successFuncKospi(jsondata) {
+            if (jsondata == "") {
+                //가끔 페이지를 읽어오지 못하는경우가 있어서
+                //값을 받아오지 못한경우 데이터를 뿌려주지 않음
+            }
+            else {
+                var kospi_now = document.getElementById("KOSPI_NOW");
+                var kospi_yd = document.getElementById("KOSPI_YD");
 
-        function successFunc1(jsondata) {
+                var kospi_now_v = jsondata;
+                var kospi_yd_v = kospi_yd.innerHTML;
 
-            var kospi_value = document.getElementById("KOSPI_VALUE");
-            var kospi_value_h = document.getElementById("KOSPI_VALUE_H");
-            var kospi_value_l = document.getElementById("KOSPI_VALUE_L");
+                kospi_now.innerHTML = Math.round(kospi_now_v)
 
-            var kospi_point = jsondata;
+                // 1 : 현재지수 > 2:어제지수  
+                if (kospi_now_v > kospi_yd_v) {
+                    kospi_now.style.color = "red";
+                    kospi_yd.style.color = "blue";
+                }
+                else {
+                    kospi_now.style.color = "blue";
+                    kospi_yd.style.color = "red";
+                }
 
-
-            kospi_value.innerHTML = Math.round(kospi_point);
-            kospi_value_h.innerHTML = Math.round(jsondata*1.035);
-            kospi_value_l.innerHTML = Math.round(jsondata-(jsondata*0.035));
-        };
-
-
+            }
+        }
     });
+    </script>
 
 
+    <!-- KOSPI 평균지수 가져오기 --> 
+    <script>
+        $(document).ready(function () {
+            $.ajax({
+                type: "GET",
+                url: "/Home/AvgKospi/",
+                data: {},
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    successFunc1(response);
+                },
+                error: function (error) {
+                    alert('Error!');
+                }
+            });
 
-</script>
+            function successFunc1(jsondata) {
 
-<script>
+                var kospi_avg = document.getElementById("KOSPI_AVG");
+                var kospi_value_h = document.getElementById("KOSPI_VALUE_H");
+                var kospi_value_l = document.getElementById("KOSPI_VALUE_L");
+                var kospi_now = document.getElementById("KOSPI_NOW");
+                var kospi_yd = document.getElementById("KOSPI_YD");
+
+                var kospi_avg_v = jsondata[0].AVG_INDEX;      //평균지수 
+  
+                kospi_avg.innerHTML = Math.round(kospi_avg_v);
+                kospi_value_h.innerHTML = Math.round(kospi_avg_v * 1.035);
+                kospi_value_l.innerHTML = Math.round(kospi_avg_v - (kospi_avg_v * 0.035));
+                kospi_yd.innerHTML = Math.round(jsondata[1].AVG_INDEX);     //어제 지수 
+
+            };
+
+        });
+        
+    </script>
+
+    <script>
         $(document).ready(function () {
             $.ajax({
                 type: "GET",
@@ -230,4 +295,4 @@
                 //});
             }
         });
-</script>
+    </script>
