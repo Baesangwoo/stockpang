@@ -291,7 +291,10 @@ namespace StockPang.Controllers
 
             var jsonData = json.Replace(",", "");
 
-            modelChart.SetKospiPoint(jsonData);
+            if (jsonData != "")
+            {
+                modelChart.SetKospiPoint(jsonData);
+            }
 
             return Json(jsonData, JsonRequestBehavior.AllowGet);
         }

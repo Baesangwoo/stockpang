@@ -112,19 +112,19 @@ namespace StockPang.Models
 
             YD_POINT = user.Tables[0].Rows[0][0].ToString();
 
-
             sSql = @"";
             sSql += "   MERGE INTO INDEX_POINT A  ";
             sSql += "   USING  ( SELECT CONVERT(CHAR(10),GETDATE(),23) INDEX_DATE, 'KOSPI' STOCK_MARKET ) B";
             sSql += "   ON      (A.STOCK_MARKET = B.STOCK_MARKET AND A.INDEX_DATE = B.INDEX_DATE )";
             sSql += "   WHEN MATCHED THEN	";
             sSql += "   UPDATE";
-            sSql += "   SET	INDEX_POINT = " + Kospi_Point;
-            sSql += "     , INDEX_HIGH  = " + Kospi_Point;
-            sSql += "     , UPDATE_DATE = GETDATE() ";
+            sSql += "   SET	INDEX_POINT = " + Kospi_Point.ToString();
+            sSql += "     , INDEX_HIGH  = " + Kospi_Point.ToString();
+            sSql += "     , INDEX_START  = " + YD_POINT;
+            sSql += "     , INDEX_LOW  = " + YD_POINT;
             sSql += "   WHEN NOT MATCHED THEN 	";
-            sSql += "   INSERT (STOCK_MARKET, INDEX_DATE, INDEX_POINT, INDEX_START, INDEX_LOW, INDEX_HIGH, INSERT_DATE)";
-            sSql += "   VALUES	('KOSPI',  CONVERT(CHAR(10), GETDATE(), 23),  " + Kospi_Point + ", " + YD_POINT + ", " + YD_POINT + ", " + Kospi_Point + ", GETDATE() );";
+            sSql += "   INSERT (STOCK_MARKET, INDEX_DATE, INDEX_POINT, INDEX_START, INDEX_LOW, INDEX_HIGH, CREATE_DATE)";
+            sSql += "   VALUES	('KOSPI',  CONVERT(CHAR(10), GETDATE(), 23),  " + Kospi_Point.ToString() + ", " + YD_POINT + ", " + YD_POINT + ", " + Kospi_Point.ToString() + ", GETDATE() );";
 
             using (var db = new MSSQLDB())
             {
