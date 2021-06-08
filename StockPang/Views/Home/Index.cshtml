@@ -93,9 +93,21 @@
     </script>
 -->
 
-    <!-- 현재 KOSPI 지수 가져오기 -->
-    <script>
-        $(document).ready(function () {
+<!-- 현재 KOSPI 지수 가져오기 -->
+<script>
+
+    /*
+        변경일시 : ( 21-05-27, CJH 변경)
+        변경내용 : {
+        기존 : $(document).ready()... 함수에 ajax 함수를 집어넣어 실행하도록 하였는데
+        ajax 실행 함수를 따로 빼서 getKospiNow 함수를 만들어 넣어줌
+        이후 getKospiNow 함수의 successFuncKospi 함수에서
+        건네받은 response(=jsondata) 데이터가 null인경우
+        ajax 함수(getKodpiNow)를 실행해줌으로써 성공할때까지 반복한다.
+        }
+    */
+
+    function getKospiNow() {
         $.ajax({
             type: "GET",
             url: "/Home/GetRealTimeKospi",
@@ -104,36 +116,41 @@
             dataType: "json",
             success: function (response) {
                 successFuncKospi(response);
-            },
+            }
         });
-        function successFuncKospi(jsondata) {
-            if (jsondata == "") {
-                //가끔 페이지를 읽어오지 못하는경우가 있어서
-                //값을 받아오지 못한경우 데이터를 뿌려주지 않음
+    }
+
+    $(document).ready(function () {
+        getKospiNow();
+    });
+
+    function successFuncKospi(jsondata) {
+        if (jsondata == "") {
+            getKospiNow();
+        }
+        else {
+            var kospi_now = document.getElementById("KOSPI_NOW");
+            var kospi_yd = document.getElementById("KOSPI_YD");
+
+            var kospi_now_v = jsondata;
+            var kospi_yd_v = kospi_yd.innerHTML;
+
+            kospi_now.innerHTML = Math.round(kospi_now_v)
+
+            // 1 : 현재지수 > 2:어제지수
+            if (kospi_now_v > kospi_yd_v) {
+                kospi_now.style.color = "red";
+                kospi_yd.style.color = "blue";
             }
             else {
-                var kospi_now = document.getElementById("KOSPI_NOW");
-                var kospi_yd = document.getElementById("KOSPI_YD");
-
-                var kospi_now_v = jsondata;
-                var kospi_yd_v = kospi_yd.innerHTML;
-
-                kospi_now.innerHTML = Math.round(kospi_now_v)
-
-                // 1 : 현재지수 > 2:어제지수  
-                if (kospi_now_v > kospi_yd_v) {
-                    kospi_now.style.color = "red";
-                    kospi_yd.style.color = "blue";
-                }
-                else {
-                    kospi_now.style.color = "blue";
-                    kospi_yd.style.color = "red";
-                }
-
+                kospi_now.style.color = "blue";
+                kospi_yd.style.color = "red";
             }
+
         }
-    });
-    </script>
+    }
+</script>
+
 
 
     <!-- KOSPI 평균지수 가져오기 --> 

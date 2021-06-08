@@ -80,7 +80,7 @@ body {
   font-size: 1rem;
   font-weight: 400;
   line-height: 1.5;
-  color: #7c8798;
+  color: #000000;
   text-align: left;
   background-color: #f9fbfd; }
 
@@ -1058,7 +1058,7 @@ pre {
 .table {
   width: 100%;
   margin-bottom: 1rem;
-  color: #7c8798; }
+  color: #000000; }
   .table th,
   .table td {
     padding: 1rem;
@@ -1093,7 +1093,7 @@ pre {
   background-color: #f4f8fb; }
 
 .table-hover tbody tr:hover {
-  color: #7c8798;
+  color: #000000;
   background-color: #e8eaec; }
 
 .table-primary,
@@ -1431,7 +1431,7 @@ select.form-control:focus::-ms-value {
   padding-bottom: 0.375rem;
   margin-bottom: 0;
   line-height: 1.5;
-  color: #7c8798;
+  color: #000000;
   background-color: transparent;
   border: solid transparent;
   border-width: 1px 0; }
@@ -1744,7 +1744,7 @@ textarea.form-control {
 .btn {
   display: inline-block;
   font-weight: 400;
-  color: #7c8798;
+  color: #000000;
   text-align: center;
   vertical-align: middle;
   user-select: none;
@@ -1759,7 +1759,7 @@ textarea.form-control {
     .btn {
       transition: none; } }
   .btn:hover {
-    color: #7c8798;
+    color: #000000;
     text-decoration: none; }
   .btn:focus, .btn.focus {
     outline: 0;
@@ -2343,7 +2343,7 @@ input[type="button"].btn-block {
   padding: 0.5rem 0;
   margin: 0.125rem 0 0;
   font-size: 1rem;
-  color: #7c8798;
+  color: #000000;
   text-align: left;
   list-style: none;
   background-color: #fff;
@@ -3993,7 +3993,7 @@ input[type="button"].btn-block {
     text-decoration: none;
     background-color: #e8eaec; }
   .list-group-item-action:active {
-    color: #7c8798;
+    color: #000000;
     background-color: #e9ecef; }
 
 .list-group-item {
@@ -4643,7 +4643,7 @@ a.close.disabled {
 
 .popover-body {
   padding: 0.5rem 0.75rem;
-  color: #7c8798; }
+  color: #000000; }
 
 .carousel {
   position: relative; }
@@ -7432,7 +7432,7 @@ a.text-purple:hover, a.text-purple:focus {
   color: #1f3fdb !important; }
 
 .text-body {
-  color: #7c8798 !important; }
+  color: #000000 !important; }
 
 .text-muted {
   color: #9eabc0 !important; }
@@ -8115,7 +8115,7 @@ User Profile
     #main-wrapper[data-layout="vertical"] .topbar .top-navbar .navbar-header[data-logobg="skin6"] .nav-toggler,
     #main-wrapper[data-layout="vertical"] .topbar .top-navbar .navbar-header[data-logobg="skin6"] .topbartoggler, #main-wrapper[data-layout="horizontal"] .topbar .top-navbar .navbar-header[data-logobg="skin6"] .nav-toggler,
     #main-wrapper[data-layout="horizontal"] .topbar .top-navbar .navbar-header[data-logobg="skin6"] .topbartoggler {
-      color: #7c8798; }
+      color: #000000; }
   #main-wrapper[data-layout="vertical"] .topbar .navbar-collapse[data-navbarbg="skin6"],
   #main-wrapper[data-layout="vertical"] .topbar[data-navbarbg="skin6"], #main-wrapper[data-layout="horizontal"] .topbar .navbar-collapse[data-navbarbg="skin6"],
   #main-wrapper[data-layout="horizontal"] .topbar[data-navbarbg="skin6"] {
@@ -8222,7 +8222,7 @@ Table Cell
 body {
   margin: 0;
   overflow-x: hidden;
-  color: #7c8798;
+  color: #000000;
   background: #f9fbfd; }
 
 html {
@@ -8230,7 +8230,7 @@ html {
   min-height: 100%; }
 
 a.link {
-  color: #7c8798; }
+  color: #000000; }
   a.link:hover, a.link:focus {
     color: #5f76e8; }
 
@@ -8287,7 +8287,7 @@ ul.list-style-none {
   ul.list-style-none li {
     list-style: none; }
     ul.list-style-none li a {
-      color: #7c8798;
+      color: #000000;
       padding: 8px 0px;
       display: block;
       text-decoration: none; }
