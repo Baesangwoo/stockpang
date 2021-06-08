@@ -133,6 +133,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\modelChart.cs" />
+    <Compile Include="Models\modelLogin.cs" />
     <Compile Include="Models\modelStockList.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

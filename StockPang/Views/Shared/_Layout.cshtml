@@ -95,7 +95,7 @@
 
                     <div class="float-right" style="margin-right:20px; text-align:right; width:50%">
                         <!-- Full width modal -->
-                        @if (Request.Cookies.Get("USER_ID") == null)
+                        @if (Request.Cookies.Get("USER_INFO") == null)
                         {
                             <button type="button" class="btn btn-info" onclick="location.href = '/Login/Login'">Login</button>
                         }
@@ -103,7 +103,7 @@
                         {
                             <img src="~/Content/image/Login_1.jpeg" class="rounded-circle" width="40" height="40" asp-append-version="true" />
                             <span class="ml-2 d-none d-lg-inline-block">
-                                <span>Hello,</span> <span class="text-dark">@Request.Cookies["USER_ID"].Values[0] 님 어서오세요</span>
+                                <span class="text-dark">@Server.UrlDecode(Request.Cookies["USER_INFO"].Values["USER_ALIAS"].ToString()) 님 어서오세요</span>
                             </span>
                             <button type="button" class="btn btn-info" onclick="location.href = '/Login/LogOut'">
                                 LogOut
