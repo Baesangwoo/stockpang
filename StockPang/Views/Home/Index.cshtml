@@ -37,7 +37,7 @@
         <tr><td>현재 코스피 지수:</td> <td id="KOSPI_NOW"> </td> <td>&nbsp</td> <td>어제 코스피 지수:</td> <td id="KOSPI_YD"> </td>  </tr>
     </table>
     <table>
-        <tr><td>평균 코스피 지수(60일):</td> <td id="KOSPI_AVG"> </td> </tr>
+        <tr><td>평균 코스피 지수( </td> <td id="MIN_INDEX_DATE"> </td> <td>~60일):</td> <td id="KOSPI_AVG"> </td> </tr>
     </table>
     <table style="font-size:85%">
         <tr>
@@ -107,6 +107,10 @@
         }
     */
 
+    $(document).ready(function () {
+        getKospiNow();
+    });
+
     function getKospiNow() {
         $.ajax({
             type: "GET",
@@ -120,9 +124,6 @@
         });
     }
 
-    $(document).ready(function () {
-        getKospiNow();
-    });
 
     function successFuncKospi(jsondata) {
         if (jsondata == "") {
@@ -177,12 +178,15 @@
                 var kospi_value_l = document.getElementById("KOSPI_VALUE_L");
                 var kospi_now = document.getElementById("KOSPI_NOW");
                 var kospi_yd = document.getElementById("KOSPI_YD");
+                var kospi_min_date = document.getElementById("MIN_INDEX_DATE");
 
-                var kospi_avg_v = jsondata[0].AVG_INDEX;      //평균지수 
-  
+                var kospi_avg_v = jsondata[0].AVG_INDEX;                    //평균지수 
+                kospi_min_date.innerHTML = jsondata[0].INDEX_DATE;          //평균시작일자  
+
                 kospi_avg.innerHTML = Math.round(kospi_avg_v);
                 kospi_value_h.innerHTML = Math.round(kospi_avg_v * 1.035);
                 kospi_value_l.innerHTML = Math.round(kospi_avg_v - (kospi_avg_v * 0.035));
+
                 kospi_yd.innerHTML = Math.round(jsondata[1].AVG_INDEX);     //어제 지수 
 
             };
@@ -191,6 +195,7 @@
         
     </script>
 
+    <!-- Chart Display -->  
     <script>
         $(document).ready(function () {
             $.ajax({

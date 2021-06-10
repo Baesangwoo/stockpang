@@ -34,6 +34,7 @@ namespace StockPang.Models
 
             string YD_POINT;  
 
+
             // 어제 날짜 지수 가져오기 
             string sSql = @"";
             sSql += " SELECT MAX(INDEX_POINT) INDEX_POINT ";
@@ -61,16 +62,16 @@ namespace StockPang.Models
 
             //평균 지수 가져오기 
             sSql = @"";
-            sSql += " SELECT ROUND(AVG(INDEX_POINT),2) AVG_POINT ";
+            sSql += " SELECT ROUND(AVG(INDEX_POINT),2) AVG_POINT, MIN(CONVERT(CHAR(10), INDEX_DATE, 111)) INDEX_DATE ";
             sSql += " FROM   ( " ; 
-            sSql += "        SELECT  TOP 60	ISNULL(INDEX_POINT,0) INDEX_POINT";
+            sSql += "        SELECT  TOP 60	ISNULL(INDEX_POINT,0) INDEX_POINT, INDEX_DATE";
             sSql += "        FROM	INDEX_POINT";
             sSql += "        WHERE	STOCK_MARKET	=	'KOSPI'";
             sSql += "        AND 	INDEX_DATE 	    >	GETDATE() - 120 ";
             sSql += "        ORDER BY INDEX_DATE DESC ";
             sSql += "        ) A";
             sSql += " UNION ALL";
-            sSql += " SELECT " + YD_POINT + " AVG_POINT " ;
+            sSql += " SELECT " + YD_POINT + " AVG_POINT, CONVERT(CHAR(10),GETDATE(),111) INDEX_DATE " ;
 
             using (var db = new MSSQLDB())
             {
@@ -86,6 +87,14 @@ namespace StockPang.Models
             string sSql;
             int result;
             string YD_POINT;  
+
+            // 오늘이 토,일이면 저장하지 않고 패쓰 
+            DateTime nowDt = DateTime.Now;
+
+            if (nowDt.DayOfWeek == DayOfWeek.Saturday || nowDt.DayOfWeek == DayOfWeek.Sunday)
+            {
+                return 0;
+            }
 
             // 어제 날짜 지수 가져오기 
             sSql = @"";

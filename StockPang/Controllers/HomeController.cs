@@ -203,6 +203,8 @@ namespace StockPang.Controllers
         public class modelAvgKospi
         {
             public string AVG_INDEX;
+            public string INDEX_DATE;
+
         }
 
         public ActionResult AvgKospi()
@@ -216,6 +218,8 @@ namespace StockPang.Controllers
             {
                 modelAvgKospi data = new modelAvgKospi();
                 data.AVG_INDEX = model.Tables[0].Rows[iloopCount]["AVG_POINT"].ToString();
+
+                data.INDEX_DATE = model.Tables[0].Rows[iloopCount]["INDEX_DATE"].ToString();
 
                 List.Add(data);
             }
