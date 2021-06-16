@@ -20,6 +20,7 @@ namespace StockPang.Controllers
             return Redirect("/login/login");
         }
 
+
         [HttpGet]
         public ActionResult Login(string msg)
         {
@@ -95,5 +96,79 @@ namespace StockPang.Controllers
         {
             return View();
         }
+
+        [HttpGet]
+        public ActionResult Register(string msg)
+        {
+            ViewData["msg"] = msg;
+            return View();
+        }
+        
+
+        public ActionResult IDCheck( string User_Id )
+        {
+
+
+            bool data;
+ 
+            data = modelLogin.GetIDCheck(User_Id);
+
+            return Json(data, JsonRequestBehavior.AllowGet);
+
+
+        }
+        public ActionResult AliasCheck(string User_Alias)
+        {
+
+
+            bool data;
+
+            data = modelLogin.GetAliasCheck(User_Alias);
+
+            return Json(data, JsonRequestBehavior.AllowGet);
+
+
+        }
+
+        [HttpPost]
+        public ActionResult Register(string reg_user_id, string reg_user_id_chk, string reg_user_pw, string reg_user_pw2, string user_nickname,
+                                        string user_nickname_chk, string user_phone, string user_email)
+        {
+
+            //빈 데이타 체크 
+            if (string.IsNullOrEmpty(reg_user_id) || string.IsNullOrEmpty(reg_user_pw) || string.IsNullOrEmpty(user_nickname ))
+            {
+                return Redirect("/login/Register?msg=미입력 항목이 있습니다");
+            }
+            
+
+            // 아이디 중복 체크 
+            if (reg_user_id != reg_user_id_chk) {
+                return Redirect("/login/Register?msg=아이디 중복 확인");
+            } 
+
+            // 패스워드 확인
+            if (reg_user_pw != reg_user_pw2)
+            {
+                return Redirect("/login/Register?msg=패스워드 확인");
+            } 
+
+            // 닉네임 중복 체크 
+            if (user_nickname != user_nickname_chk)
+            {
+                return Redirect("/login/Register?msg=닉네임 중복 확인");
+            } 
+
+
+            // 사용자 저장 
+            modelLogin.SetUser(reg_user_id, reg_user_pw, user_nickname, user_phone, user_email);
+
+            return Redirect("/login/login");
+
+
+        }
+
     }
+
+
 }
