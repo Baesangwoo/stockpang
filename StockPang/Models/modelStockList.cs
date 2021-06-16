@@ -30,7 +30,10 @@ namespace StockPang.Models
 
             return user;
         }
-        public static DataSet GetSearchData(string Search_name, string Search_class, string Search_psr, string Search_por, string Search_per, string Search_biz_rate, string Search_net_rate)
+        public static DataSet GetSearchData(string Search_name, string Search_class, string Search_psr
+                                            , string Search_por, string Search_per, string Search_biz_rate, string Search_net_rate
+                                            , string List_Type, string User_ID
+                                        )
         {
 
             string sSql = @"";
@@ -43,7 +46,14 @@ namespace StockPang.Models
             sSql += "       ,   STOCK_CLASS B";
             sSql += "   WHERE   A.STOCK_CODE = B.STOCK_CODE ";
             sSql += "   AND   ( A.STOCK_CODE LIKE '%" + Search_name + "%'" + " OR A.STOCK_NAME LIKE '%" + Search_name + "%')";
-            sSql += "   AND   ( A.STOCK_CLASS1 LIKE '%" + Search_class + "%'" + " OR A.STOCK_CLASS2 LIKE '%" + Search_class + "%')"; 
+            sSql += "   AND   ( A.STOCK_CLASS1 LIKE '%" + Search_class + "%'" + " OR A.STOCK_CLASS2 LIKE '%" + Search_class + "%')";
+
+            //User별 
+            if (List_Type == "User")
+            {
+                sSql += "   AND   A.STOCK_CODE IN  ( SELECT C.STOCK_CODE FROM USER_STOCK C WHERE C.USER_ID = " + User_ID + " )";
+            }
+
             if (!string.IsNullOrEmpty(Search_psr) && Search_psr != "")
             {
                 sSql += "   AND     CAL_PSR   <= " + Search_psr;
@@ -77,7 +87,11 @@ namespace StockPang.Models
             return user;
         }
 
-        public static DataSet GetSearchData2(string Search_name, string Search_class, string Search_per, string Search_gap, string Search_sa_rate, string Search_bp_rate, string Search_np_rate)
+        public static DataSet GetSearchData2(
+                                            string Search_name, string Search_class, string Search_per, string Search_gap
+                                        ,   string Search_sa_rate, string Search_bp_rate, string Search_np_rate
+                                        ,   string List_Type, string User_ID
+            )
         {
 
             string sSql = @"";
@@ -90,7 +104,13 @@ namespace StockPang.Models
             sSql += "       ,   STOCK_CLASS B";
             sSql += "   WHERE   A.STOCK_CODE = B.STOCK_CODE ";
             sSql += "   AND   ( A.STOCK_CODE LIKE '%" + Search_name + "%'" + " OR A.STOCK_NAME LIKE '%" + Search_name + "%')";
-            sSql += "   AND   ( A.STOCK_CLASS1 LIKE '%" + Search_class + "%'" + " OR A.STOCK_CLASS2 LIKE '%" + Search_class + "%')"; 
+            sSql += "   AND   ( A.STOCK_CLASS1 LIKE '%" + Search_class + "%'" + " OR A.STOCK_CLASS2 LIKE '%" + Search_class + "%')";
+            //User별 
+            if (List_Type == "User")
+            {
+                sSql += "   AND   A.STOCK_CODE IN  ( SELECT C.STOCK_CODE FROM USER_STOCK C WHERE C.USER_ID = " + User_ID + " )";
+            }
+
             if (!string.IsNullOrEmpty(Search_per) && Search_per != "")
             {
                 sSql += "   AND     CAL_PER   <= " + Search_per;
@@ -158,7 +178,7 @@ namespace StockPang.Models
 
         }
 
-        public static int SetStockInsert(string Reg_Code, string Reg_Name, string Reg_Class1, string Reg_Class2, string Reg_Remark)
+        public static int SetStockInsert(string Reg_Code, string Reg_Name, string Reg_Class1, string Reg_Class2, string Reg_Remark, string User_ID)
         {
 
             string sSql = @"";
@@ -169,9 +189,10 @@ namespace StockPang.Models
             sSql += "   UPDATE";
             sSql += "   SET	STOCK_CODE = '" + Reg_Code + "'";
             sSql += "     , STOCK_NAME = '" + Reg_Name + "'";
+            sSql += "     , UPDATE_USER = " + User_ID ;
             sSql += "   WHEN NOT MATCHED THEN 	";
-            sSql += "   INSERT (STOCK_CODE, STOCK_NAME)";
-            sSql += "   VALUES	('" + Reg_Code + "', '" + Reg_Name + "');";
+            sSql += "   INSERT (STOCK_CODE, STOCK_NAME, CREATE_USER)";
+            sSql += "   VALUES	('" + Reg_Code + "', '" + Reg_Name + "' , " + User_ID + " );";
 
             int result;
 
@@ -194,7 +215,6 @@ namespace StockPang.Models
             }
             
 
-
             sSql = @"";
             sSql += "   UPDATE STOCK_INFO  ";
             sSql += "   SET    STOCK_CLASS1 = B.STOCK_CLASS1, ";
@@ -209,6 +229,28 @@ namespace StockPang.Models
                 result = db.Execute(sSql);
             }
             
+            // USER_STOCK 등록 
+            if (! string.IsNullOrEmpty(User_ID))
+            {
+                sSql = @"";
+                sSql += "   MERGE INTO USER_STOCK A  ";
+                sSql += "   USING  ( SELECT '" + Reg_Code + "' STOCK_CODE, " + User_ID + " USER_ID  ) B";
+                sSql += "   ON      (A.STOCK_CODE = B.STOCK_CODE AND A.USER_ID = B.USER_ID )";
+                sSql += "   WHEN MATCHED THEN	";
+                sSql += "   UPDATE";
+                sSql += "   SET	STOCK_REMARK = '" + Reg_Remark + "'";
+                sSql += "   WHEN NOT MATCHED THEN 	";
+                sSql += "   INSERT (STOCK_CODE, USER_ID, STOCK_REMARK )";
+                sSql += "   VALUES	('" + Reg_Code + "', " + User_ID + ", '" + Reg_Remark + "' );";
+
+                using (var db = new MSSQLDB())
+                {
+                    result = db.Execute(sSql);
+                }
+
+
+            }
+                        
             return result;
 
         }

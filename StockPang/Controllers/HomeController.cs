@@ -43,12 +43,13 @@ namespace StockPang.Controllers
             return View();
         }
 
+        // 전체  List 
         [HttpGet]
         public ActionResult StockList(string Search_name, string Search_class, string Search_psr, string Search_por, string Search_per, string Search_biz_rate, string Search_net_rate)
         {
             DataSet data = null;
             
-            data = modelStockList.GetSearchData(Search_name, Search_class, Search_psr, Search_por, Search_per, Search_biz_rate, Search_net_rate);
+            data = modelStockList.GetSearchData(Search_name, Search_class, Search_psr, Search_por, Search_per, Search_biz_rate, Search_net_rate, "All", "0");
             
             data.Tables[0].Columns.Add("TOTAL_AMT_C");
             data.Tables[0].Columns.Add("SALES_AMT_C");
@@ -88,14 +89,67 @@ namespace StockPang.Controllers
 
             }
 
-            return View(data);
+            return View("StockList", data);
         }
 
-        public ActionResult StockList2(string Search_name, string Search_class, string Search_per, string Search_gap, string Search_sa_rate, string Search_bp_rate, string Search_np_rate)
+        // User별 List 
+        public ActionResult UserStock(string Search_name, string Search_class, string Search_psr, string Search_por, 
+                        string Search_per, string Search_biz_rate, string Search_net_rate)
+        {
+            DataSet data = null;
+            
+            string userID = Request.Cookies["USER_INFO"].Values["USER_ID"].ToString();
+            
+            data = modelStockList.GetSearchData(Search_name, Search_class, Search_psr, Search_por, Search_per, Search_biz_rate, Search_net_rate, "User", userID);
+
+            data.Tables[0].Columns.Add("TOTAL_AMT_C");
+            data.Tables[0].Columns.Add("SALES_AMT_C");
+            data.Tables[0].Columns.Add("BIZ_PROFIT_C");
+            data.Tables[0].Columns.Add("NET_PROFIT_C");
+
+            foreach (DataRow row in data.Tables[0].Rows)
+            {
+
+                string Data01 = row["TOTAL_AMT"].ToString();    //시총 
+                string Data02 = row["SALES_AMT"].ToString();    //매출액 
+                string Data03 = row["BIZ_PROFIT"].ToString();   //영업이익 
+                string Data04 = row["NET_PROFIT"].ToString();   //순이익 
+
+                //문자로 변경한 결과값을 보관하지 못해서 컬럼이 스트링형으로 만들어짐 
+                row["TOTAL_AMT_C"] = string.Format("{0:# #### #### #### #### ####}", Convert.ToInt32(Data01)).TrimStart().Replace(" ", ",");
+                row["SALES_AMT_C"] = string.Format("{0:# #### #### #### #### ####}", Convert.ToInt32(Data02)).TrimStart().Replace(" ", ",");
+
+
+                if (Convert.ToDouble(row["BIZ_PROFIT"].ToString()) >= 0)
+                {
+                    row["BIZ_PROFIT_C"] = string.Format("{0:# #### #### #### #### ####}", Convert.ToInt32(Data03)).TrimStart().Replace(" ", ",");
+                }
+                else
+                {
+                    row["BIZ_PROFIT_C"] = "-" + string.Format("{0:# #### #### #### #### ####}", Convert.ToInt32(Data03) * -1).TrimStart().Replace(" ", ",");
+                }
+
+                if (Convert.ToDouble(row["NET_PROFIT"].ToString()) >= 0)
+                {
+                    row["NET_PROFIT_C"] = string.Format("{0:# #### #### #### #### ####}", Convert.ToInt32(Data04)).TrimStart().Replace(" ", ",");
+                }
+                else
+                {
+                    row["NET_PROFIT_C"] = "-" + string.Format("{0:# #### #### #### #### ####}", Convert.ToInt32(Data04) * -1).TrimStart().Replace(" ", ",");
+                }
+
+            }
+
+            return View("StockList", data);
+        }
+
+        public ActionResult StockList2( string Search_name, string Search_class, string Search_per, string Search_gap, string Search_sa_rate
+                                    ,   string Search_bp_rate, string Search_np_rate
+                                )
         {
             DataSet data = null;
 
-            data = modelStockList.GetSearchData2(Search_name, Search_class, Search_per, Search_gap, Search_sa_rate, Search_bp_rate, Search_np_rate);
+            data = modelStockList.GetSearchData2(Search_name, Search_class, Search_per, Search_gap, Search_sa_rate, Search_bp_rate, Search_np_rate, "All", "0");
 
             data.Tables[0].Columns.Add("TOTAL_AMT_C");
             data.Tables[0].Columns.Add("SALES_AMT_C");
@@ -147,7 +201,71 @@ namespace StockPang.Controllers
     
             }
 
-            return View(data);
+            return View("StockList2", data);
+        }
+
+        public ActionResult UserStock2( string Search_name, string Search_class, string Search_per, string Search_gap, string Search_sa_rate
+                                    ,   string Search_bp_rate, string Search_np_rate
+                                )
+        {
+            DataSet data = null;
+            string userID = Request.Cookies["USER_INFO"].Values["USER_ID"].ToString();
+
+            data = modelStockList.GetSearchData2(Search_name, Search_class, Search_per, Search_gap, Search_sa_rate, Search_bp_rate, Search_np_rate, "User", userID);
+
+            data.Tables[0].Columns.Add("TOTAL_AMT_C");
+            data.Tables[0].Columns.Add("SALES_AMT_C");
+            data.Tables[0].Columns.Add("BIZ_PROFIT_C");
+            data.Tables[0].Columns.Add("NET_PROFIT_C");
+
+            data.Tables[0].Columns.Add("PRICE_GAP");
+            data.Tables[0].Columns.Add("PRICE_GAP_RATE");
+
+            foreach (DataRow row in data.Tables[0].Rows)
+            {
+
+                string Data01 = row["TOTAL_AMT"].ToString();    //시총 
+                string Data02 = row["SALES_AMT"].ToString();    //매출액 
+                string Data03 = row["BIZ_PROFIT"].ToString();   //영업이익 
+                string Data04 = row["NET_PROFIT"].ToString();   //순이익 
+
+                //문자로 변경한 결과값을 보관하지 못해서 컬럼이 스트링형으로 만들어짐 
+                row["TOTAL_AMT_C"] = string.Format("{0:# #### #### #### #### ####}", Convert.ToInt32(Data01)).TrimStart().Replace(" ", ",");
+                row["SALES_AMT_C"] = string.Format("{0:# #### #### #### #### ####}", Convert.ToInt32(Data02)).TrimStart().Replace(" ", ",");
+
+
+                if (Convert.ToDouble(row["BIZ_PROFIT"].ToString()) >= 0)
+                {
+                    row["BIZ_PROFIT_C"] = string.Format("{0:# #### #### #### #### ####}", Convert.ToInt32(Data03)).TrimStart().Replace(" ", ",");
+                }
+                else
+                {
+                    row["BIZ_PROFIT_C"] = "-" + string.Format("{0:# #### #### #### #### ####}", Convert.ToInt32(Data03) * -1).TrimStart().Replace(" ", ",");
+                }
+
+                if (Convert.ToDouble(row["NET_PROFIT"].ToString()) >= 0)
+                {
+                    row["NET_PROFIT_C"] = string.Format("{0:# #### #### #### #### ####}", Convert.ToInt32(Data04)).TrimStart().Replace(" ", ",");
+                }
+                else
+                {
+                    row["NET_PROFIT_C"] = "-" + string.Format("{0:# #### #### #### #### ####}", Convert.ToInt32(Data04) * -1).TrimStart().Replace(" ", ",");
+                }
+
+                if (Convert.ToDouble(row["NAVER_PRICE"].ToString()) != 0)
+                {
+                    row["PRICE_GAP"] = Convert.ToDecimal(row["NAVER_PRICE"].ToString()) - Convert.ToDecimal(row["STOCK_PRICE"].ToString());
+                    row["PRICE_GAP_RATE"] = Convert.ToDecimal(Convert.ToDecimal(row["PRICE_GAP"].ToString()) / Convert.ToDecimal(row["NAVER_PRICE"].ToString()) * 100).ToString("0.0#");
+                }
+                else
+                {
+                    row["PRICE_GAP"] = 0.ToString("0.0#");
+                    row["PRICE_GAP_RATE"] = 0.ToString("0.0#");
+                }
+
+            }
+
+            return View("StockList2", data);
         }
 
         public ActionResult StockReg(string Search_name, string Search_class)
@@ -184,7 +302,9 @@ namespace StockPang.Controllers
         {
             DataSet data = null;
 
-            modelStockList.SetStockInsert(Reg_Code, Reg_Name, Reg_Class1, Reg_Class2, Reg_Remark);
+            string userID = Request.Cookies["USER_INFO"].Values["USER_ID"].ToString();
+
+            modelStockList.SetStockInsert(Reg_Code, Reg_Name, Reg_Class1, Reg_Class2, Reg_Remark, userID);
 
 
             return Redirect("StockReg");

@@ -43,7 +43,7 @@ namespace StockPang.Models
         {
 
             string sSql = @"";
-            sSql += "   SELECT  USER_NAME, USER_ALIAS, USER_STATUS ";
+            sSql += "   SELECT  USER_ID, USER_ALIAS, USER_STATUS ";
             sSql += "   FROM    USER_MST";
             sSql += "   WHERE   USER_CODE = '" + UserCode + "'";
 

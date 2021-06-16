@@ -35,21 +35,20 @@ namespace StockPang.Controllers
         public ActionResult LogOut(string msg)
         {
             //HttpCookie cookie = new HttpCookie("USER_ID");
-            Response.Cookies["USER_ID"].Expires = DateTime.Now.AddDays(-1);
             Response.Cookies["USER_INFO"].Expires = DateTime.Now.AddDays(-1);
             return Redirect("/Home/Index");
         }
 
         
         [HttpPost]
-        public async Task<ActionResult> Login(string user_id, string user_pw)
+        public async Task<ActionResult> Login(string user_code, string user_pw)
         {
             try
             {
                 bool data;
                 DataSet data1;
 
-                data = modelLogin.GetCheckUser(user_id, user_pw);
+                data = modelLogin.GetCheckUser(user_code, user_pw);
 
                 if (data == false)
                 {
@@ -58,17 +57,17 @@ namespace StockPang.Controllers
                 else
                 {
 
-                    data1 = modelLogin.GetUser(user_id);
+                    data1 = modelLogin.GetUser(user_code);
 
-                    string USER_NAME = data1.Tables[0].Rows[0]["USER_NAME"].ToString();
+                    string USER_ID = data1.Tables[0].Rows[0]["USER_ID"].ToString();
                     string USER_ALIAS = data1.Tables[0].Rows[0]["USER_ALIAS"].ToString();
                     string USER_STATUS = data1.Tables[0].Rows[0]["USER_STATUS"].ToString();
 
 
                     HttpCookie cookie = new HttpCookie("USER_INFO");
-                    
-                    cookie.Values["USER_ID"] =  Server.UrlEncode(Convert.ToString(user_id));
-                    cookie.Values["USER_NAME"] = Server.UrlEncode(Convert.ToString(USER_NAME));
+
+                    cookie.Values["USER_ID"] = Server.UrlEncode(Convert.ToString(USER_ID));
+                    cookie.Values["USER_CODE"] = Server.UrlEncode(Convert.ToString(user_code));
                     cookie.Values["USER_ALIAS"] = Server.UrlEncode(Convert.ToString(USER_ALIAS));
                     cookie.Values["USER_STATUS"] = Server.UrlEncode(Convert.ToString(USER_STATUS));
 
