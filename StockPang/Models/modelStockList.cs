@@ -147,6 +147,63 @@ namespace StockPang.Models
             return user;
         }
 
+        public static DataSet GetSearchData3(
+                                            string Search_name, string Search_class, string Search_per, string Search_gap
+                                        , string Search_sa_rate, string Search_bp_rate, string Search_np_rate
+                                        , string List_Type, string User_ID
+            )
+        {
+
+            string sSql = @"";
+            sSql += "   SELECT  A.STOCK_CODE, B.STOCK_NAME, B.STOCK_URL, B.STOCK_CLASS1, B.STOCK_PRICE, B.NAVER_PRICE, ";
+            sSql += "           A.BUY_PRICE, A.SELL_PRICE, A.AVG_PRICE,  ";
+            sSql += "           A.STOCK_REMARK, ISNULL(LEN(A.STOCK_REMARK),0) as REMARK_LEN, ";
+            sSql += "           ROUND(CASE A.BUY_PRICE WHEN 0 THEN 0 ELSE (B.STOCK_PRICE - A.BUY_PRICE) / A.BUY_PRICE * 100 END,2) as BUY_GAP, ";
+            sSql += "           ROUND(CASE A.SELL_PRICE WHEN 0 THEN 0 ELSE (A.SELL_PRICE - B.STOCK_PRICE) / A.SELL_PRICE * 100 END,2) as SELL_GAP, ";
+            sSql += "           ROUND(CASE A.AVG_PRICE WHEN 0 THEN 0 ELSE (B.STOCK_PRICE - A.AVG_PRICE) / A.AVG_PRICE * 100 END,2) as AVG_GAP ";
+            sSql += "   FROM    USER_STOCK  A"; 
+            sSql += "       ,   STOCK_INFO  B";
+            sSql += "   WHERE   A.USER_ID    = " + User_ID ;      
+            sSql += "   AND     B.STOCK_CODE = A.STOCK_CODE ";
+            sSql += "   AND   ( B.STOCK_CODE LIKE '%" + Search_name + "%'" + " OR B.STOCK_NAME LIKE '%" + Search_name + "%')";
+            sSql += "   AND   ( B.STOCK_CLASS1 LIKE '%" + Search_class + "%'" + " OR B.STOCK_CLASS2 LIKE '%" + Search_class + "%')";
+
+            if (!string.IsNullOrEmpty(Search_per) && Search_per != "")
+            {
+                sSql += "   AND     B.CAL_PER   <= " + Search_per;
+            }
+
+            if (!string.IsNullOrEmpty(Search_gap) && Search_gap != "")
+            {
+                sSql += "   AND  (  (B.NAVER_PRICE - B.STOCK_PRICE) / B.NAVER_PRICE * 100  >= " + Search_gap + " OR  (B.NAVER_PRICE - B.STOCK_PRICE) / B.NAVER_PRICE * 100 <=  (" + Search_gap + "*-1)  )";
+                sSql += "   AND   B.NAVER_PRICE <> 0 ";
+            }
+
+            if (!string.IsNullOrEmpty(Search_sa_rate) && Search_sa_rate != "")
+            {
+                sSql += "   AND     B.SA_RATE   >= " + Search_sa_rate;
+            }
+            if (!string.IsNullOrEmpty(Search_bp_rate) && Search_bp_rate != "")
+            {
+                sSql += "   AND     B.BP_RATE   >= " + Search_bp_rate;
+            }
+            if (!string.IsNullOrEmpty(Search_np_rate) && Search_np_rate != "")
+            {
+                sSql += "   AND     B.NP_RATE   >= " + Search_np_rate;
+            }
+            sSql += "   ORDER BY B.TOTAL_AMT DESC";
+
+
+            DataSet user;
+
+            using (var db = new MSSQLDB())
+            {
+                user = db.Query(sSql);
+            }
+
+            return user;
+        }
+
 
         public static DataSet GetSearchReg(string Search_name, string Search_class)
         {
@@ -230,7 +287,7 @@ namespace StockPang.Models
             }
             
             // USER_STOCK 등록 
-            if (! string.IsNullOrEmpty(User_ID))
+            if (! (string.IsNullOrEmpty(User_ID) || (User_ID == "0")))
             {
                 sSql = @"";
                 sSql += "   MERGE INTO USER_STOCK A  ";
@@ -247,8 +304,6 @@ namespace StockPang.Models
                 {
                     result = db.Execute(sSql);
                 }
-
-
             }
                         
             return result;
@@ -289,6 +344,47 @@ namespace StockPang.Models
             }
 
             return user;
+
+        }
+
+        public static bool SetRegDelete(string Stock_Code, string User_ID)
+        {
+
+            string sSql = @"";
+            sSql += "   DELETE FROM USER_STOCK ";
+            sSql += "   WHERE STOCK_CODE = '" + Stock_Code + "'";
+            sSql += "   AND   USER_ID = " + User_ID;
+
+            DataSet user;
+
+            using (var db = new MSSQLDB())
+            {
+                user = db.Query(sSql);
+            }
+
+            return true;
+
+        }
+
+        public static bool SetSavePrice(string Stock_Code, string User_ID, string Buy_Price, string Sell_Price, string Avg_Price)
+        {
+
+            string sSql = @"";
+            sSql += "   UPDATE  USER_STOCK ";
+            sSql += "   SET     BUY_PRICE = " +  Buy_Price;
+            sSql += "       ,   SELL_PRICE = " +  Sell_Price;
+            sSql += "       ,   AVG_PRICE = " + Avg_Price;
+            sSql += "   WHERE   STOCK_CODE = '" + Stock_Code + "'";
+            sSql += "   AND     USER_ID = " + User_ID;
+
+            DataSet user;
+
+            using (var db = new MSSQLDB())
+            {
+                user = db.Query(sSql);
+            }
+
+            return true;
 
         }
 

@@ -97,8 +97,15 @@ namespace StockPang.Controllers
                         string Search_per, string Search_biz_rate, string Search_net_rate)
         {
             DataSet data = null;
-            
-            string userID = Request.Cookies["USER_INFO"].Values["USER_ID"].ToString();
+            string userID;
+            if (Request.Cookies["USER_INFO"] == null)
+            {
+                userID = "0";
+            }
+            else
+            {
+                userID = Request.Cookies["USER_INFO"].Values["USER_ID"].ToString();
+            }
             
             data = modelStockList.GetSearchData(Search_name, Search_class, Search_psr, Search_por, Search_per, Search_biz_rate, Search_net_rate, "User", userID);
 
@@ -209,7 +216,15 @@ namespace StockPang.Controllers
                                 )
         {
             DataSet data = null;
-            string userID = Request.Cookies["USER_INFO"].Values["USER_ID"].ToString();
+            string userID;
+            if (Request.Cookies["USER_INFO"] == null)
+            {
+                userID = "0";
+            }
+            else
+            {
+                userID = Request.Cookies["USER_INFO"].Values["USER_ID"].ToString();
+            }
 
             data = modelStockList.GetSearchData2(Search_name, Search_class, Search_per, Search_gap, Search_sa_rate, Search_bp_rate, Search_np_rate, "User", userID);
 
@@ -268,6 +283,45 @@ namespace StockPang.Controllers
             return View("StockList2", data);
         }
 
+        public ActionResult UserStock3(string Search_name, string Search_class, string Search_per, string Search_gap, string Search_sa_rate
+                                    , string Search_bp_rate, string Search_np_rate
+                                )
+        {
+            DataSet data = null;
+            string userID;
+            if (Request.Cookies["USER_INFO"] == null)
+            {
+                userID = "0";
+            }
+            else
+            {
+                userID = Request.Cookies["USER_INFO"].Values["USER_ID"].ToString();
+            }
+
+            data = modelStockList.GetSearchData3(Search_name, Search_class, Search_per, Search_gap, Search_sa_rate, Search_bp_rate, Search_np_rate, "User", userID);
+            data.Tables[0].Columns.Add("BUY_GAP_C");
+            data.Tables[0].Columns.Add("SELL_GAP_C"); 
+            data.Tables[0].Columns.Add("AVG_GAP_C");
+
+            data.Tables[0].Columns.Add("STOCK_SAVE");
+
+            foreach (DataRow row in data.Tables[0].Rows)
+            {
+                double bValue = Convert.ToDouble(row["BUY_GAP"].ToString());
+                double sValue = Convert.ToDouble(row["SELL_GAP"].ToString());
+                double aValue = Convert.ToDouble(row["AVG_GAP"].ToString());
+
+                row["BUY_GAP_C"] = bValue.ToString("0.00");
+                row["SELL_GAP_C"] = sValue.ToString("0.00");
+                row["AVG_GAP_C"] = aValue.ToString("0.00");
+
+                row["STOCK_SAVE"] = "저장";
+
+            }
+
+            return View("UserStock3", data);
+        }
+
         public ActionResult StockReg(string Search_name, string Search_class)
         {
             DataSet data = null;
@@ -301,13 +355,67 @@ namespace StockPang.Controllers
         public ActionResult StockInsert(string Reg_Code, string Reg_Name, string Reg_Class1, string Reg_Class2, string Reg_Remark)
         {
             DataSet data = null;
+            string userID;
 
-            string userID = Request.Cookies["USER_INFO"].Values["USER_ID"].ToString();
+            if (string.IsNullOrEmpty(Reg_Code))
+            {
+                return Redirect("StockReg");
+            }
+
+
+            if (Request.Cookies["USER_INFO"] == null)
+            {
+                userID = "0";
+            }
+            else
+            {
+                userID = Request.Cookies["USER_INFO"].Values["USER_ID"].ToString();
+            }
 
             modelStockList.SetStockInsert(Reg_Code, Reg_Name, Reg_Class1, Reg_Class2, Reg_Remark, userID);
 
 
             return Redirect("StockReg");
+        }
+
+        public ActionResult Reg_Delete(string Reg_Code)
+        {
+            DataSet data = null;
+            bool Result;
+            string userID;
+            if (Request.Cookies["USER_INFO"] == null)
+            {
+                userID = "0";
+            }
+            else
+            {
+                userID = Request.Cookies["USER_INFO"].Values["USER_ID"].ToString();
+            }
+
+            Result = modelStockList.SetRegDelete(Reg_Code, userID);
+
+
+            return Json(Result, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult Save_Price(string Stock_Code, string Buy_Price, string Sell_Price, string Avg_Price)
+        {
+            DataSet data = null;
+            bool Result;
+            string User_ID;
+            if (Request.Cookies["USER_INFO"] == null)
+            {
+                User_ID = "0";
+            }
+            else
+            {
+                User_ID = Request.Cookies["USER_INFO"].Values["USER_ID"].ToString();
+            }
+
+            Result = modelStockList.SetSavePrice(Stock_Code, User_ID, Buy_Price, Sell_Price, Avg_Price);
+
+
+            return Json(Result, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult StockDelete(string Stock_Code)

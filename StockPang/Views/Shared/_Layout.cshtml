@@ -103,7 +103,7 @@
                         {
                             <img src="~/Content/image/Login_1.jpeg" class="rounded-circle" width="40" height="40" />
                             <span class="ml-2 d-none d-lg-inline-block">
-                                <span class="text-dark">@Server.UrlDecode(Request.Cookies["USER_INFO"].Values["USER_ALIAS"].ToString()) 님 어서오세요</span>
+                                <span class="text-dark">@Server.UrlDecode(Request.Cookies["USER_INFO"].Values["USER_ALIAS"].ToString())님 어서오세요</span>
                             </span>
                             <button type="button" class="btn btn-info" onclick="location.href = '/Login/LogOut'">
                                 LogOut
@@ -173,6 +173,14 @@
                             </a>
                         </li>
 
+                        @*<li class="sidebar-item">
+                            <a class="sidebar-link sidebar-link" href="/Home/UserStock3"
+                               aria-expanded="false">
+                                <i data-feather="file-text" class="feather-icon"></i><span class="hide-menu">
+                                    종목단가
+                                </span>
+                            </a>
+                        </li>*@
                         <li class="sidebar-item">
                             <a class="sidebar-link sidebar-link" href="/Home/StockReg"
                                aria-expanded="false">

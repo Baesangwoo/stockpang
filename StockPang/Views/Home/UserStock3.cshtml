@@ -1,0 +1,257 @@
+﻿@model System.Data.DataSet
+@using System.Data
+
+@{
+    ViewBag.Title = "StockStock3";
+
+}
+
+
+@*<style>
+        .Main td {
+            text-align: end;
+        }
+    </style>*@
+
+<h4>종목단가</h4>
+<div class="Search" style="font-size:70%">
+    <form action="UserStock2" method="get" role="form">
+        <label>종목명</label> <input name="Search_name" type="text" size="10" maxlength="20" />&nbsp&nbsp&nbsp
+        <label>종목분류</label> <input name="Search_class" type="text" size="10" maxlength="20" />&nbsp&nbsp&nbsp
+        <label>PER</label> <input name="Search_per" type="number" maxlength="3" style="width:50px" />이하&nbsp&nbsp&nbsp
+        <label>목표주가Gap</label> <input name="Search_gap" type="number" size="5" maxlength="3" style="width:50px" />이상&nbsp&nbsp&nbsp
+        <label>매출성장율</label> <input name="Search_sa_rate" type="number" size="5" maxlength="3" style="width:50px" />이상&nbsp&nbsp&nbsp
+        <label>영업이익성장율</label> <input name="Search_bp_rate" type="number" size="3" maxlength="4" style="width:50px" />이상&nbsp&nbsp&nbsp
+        <label>순이익성장율</label> <input name="Search_np_rate" type="number" size="3" maxlength="4" style="width:50px" />이상&nbsp&nbsp&nbsp
+
+        <input type="submit" value="Search" />
+    </form>
+
+
+</div>
+<div class="Main">
+    <table class="table-striped table-hover" style="font-size:70%">
+        <tr>
+            <th style="width: 55px; text-align: center">종목코드</th>
+            <th style="width: 100px; text-align: center">종목명</th>
+            <th style="width: 70px; text-align: end">종목분류</th>
+            <th style="width: 70px; text-align: end">현재주가</th>
+
+            <th style="width: 70px; text-align: end">매수계획단가</th>
+            <th style="width: 80px; text-align: end">매수계획Gap(%)</th>
+
+            <th style="width: 80px; text-align: end">매도계획단가</th>
+            <th style="width: 70px; text-align: end">매도계획Gap(%)</th>
+
+            <th style="width: 70px; text-align: end">매수평단</th>
+            <th style="width: 70px; text-align: end">손익율(%)</th>
+
+
+        </tr>
+        @foreach (DataRow row in Model.Tables[0].Rows)
+        {
+            <tr>
+                @if (Convert.ToDouble(row["REMARK_LEN"].ToString()) == 0)
+                {
+                    <td class="td_center" style="width:55px;text-align:center"><a href="#" class="stockdetail" data-stockcode="@row["STOCK_CODE"]" data-stockname="@row["STOCK_NAME"]" data-stockremark="@row["STOCK_REMARK"].ToString().Replace("\r\n", "　")" data-toggle="modal" data-target="#detail-modal">@row["STOCK_CODE"]</a></td>
+                }
+                else
+                {
+                    <td class="td_center" style="width: 55px; text-align: center"><a href="#" class="stockdetail" style="color:red" data-stockcode="@row["STOCK_CODE"]" data-stockname="@row["STOCK_NAME"]" data-stockremark="@row["STOCK_REMARK"].ToString().Replace("\r\n", "　")" data-toggle="modal" data-target="#detail-modal">@row["STOCK_CODE"]</a></td>
+                }
+
+
+                <td class="td_left" style="width:100px;text-align:left"><a href="@row["STOCK_URL"]" target="_blank">@row["STOCK_NAME"]</a></td>
+                <td>@row["STOCK_CLASS1"]</td>
+                <td>@row["STOCK_PRICE"]</td>
+
+                <!--  매수계획 -->
+                <td> <input type="text" style="text-align:right" id="buy_price" name="buy_price" value="@row["BUY_PRICE"]" /></td>
+                @if (Convert.ToDouble(row["BUY_GAP"].ToString()) >= 0)
+                {
+                    <td>@row["BUY_GAP_C"]</td>
+                }
+                else
+                {
+                    <td style="color:red">@row["BUY_GAP_C"]</td>
+                }
+
+                <!--  매도계획 -->
+                <td> <input type="text" style="text-align:right" id="sell_price" name="sell_price" value="@row["SELL_PRICE"]" /></td>
+                @if (Convert.ToDouble(row["SELL_GAP"].ToString()) >= 0)
+                {
+                    <td>@row["SELL_GAP_C"]</td>
+                }
+                else
+                {
+                    <td style="color:red">@row["SELL_GAP_C"]</td>
+                }
+
+                <!--  평단 -->
+                <td> <input type="text" style="text-align:right" id="avg_price" name="avg_price" value="@row["AVG_PRICE"]" /></td>
+                @if (Convert.ToDouble(row["AVG_GAP"].ToString()) >= 0)
+                {
+                    <td>@row["AVG_GAP_C"]</td>
+                }
+                else
+                {
+                    <td style="color:red">@row["AVG_GAP_C"]</td>
+                }
+                
+
+                <td style="text-align: center"> <button class="btn-success btn-group" onclick="save_price('@row["STOCK_CODE"]', '@row["BUY_PRICE"]', '@row["SELL_PRICE"]', '@row["AVG_PRICE"]')"> 저장</button> </td>
+
+
+            </tr>
+        }
+    </table>
+</div>
+
+
+
+<script>
+    function save_price(stock_code, buy_price, sell_price, avg_price) {
+
+
+        if (stock_code == "") {
+            alert('종목을 선택하세요');
+        }
+        else {
+            $.ajax({
+                type: "GET",
+                url: "/Home/Save_Price/",
+                data: { stock_code: stock_code, buy_price: buy_price, sell_price: sell_price, avg_price: avg_price },
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    SavePriceFun(response);
+                },
+                error: function (error) {
+                    alert('Error!');
+                }
+            });
+        };
+
+        function SavePriceFun(jsondata) {
+
+            if (jsondata == true) {
+                alert("저장 되었습니다.");
+
+            }
+
+        };
+    }
+
+</script>
+
+
+
+
+<div id="detail-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" style="font-size:70%">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+
+                <div class="text-center mt-2 mb-4">
+                    <a href="index.html" class="text-success">
+                        <span>
+                            <img class="mr-2" src="../assets/images/logo-icon.png"
+                                 alt="" height="1"><img src="../assets/images/logo-text.png" alt=""
+                                                        height="1">
+                        </span>
+                    </a>
+                </div>
+
+
+                <form action="RemarkSave" class="pl-3 pr-3">
+                    <div class="form-group">
+                        <label>종목코드</label>
+                        <input class="form-control" type="text" name="dtl_stock_code" id="dtl_stock_code">
+                    </div>
+                    <div class="form-group">
+                        <label>종목명</label>
+                        <input class="form-control" type="text" name="dtl_stock_name" id="dtl_stock_name">
+                    </div>
+                    <div class="form-group">
+                        <label>기업내용</label>
+                        <textarea class="form-control" name="dtl_stock_remark" id="dtl_stock_remark" rows="5" cols="50"></textarea>
+                    </div>
+
+
+                    <input type="hidden" name="ViewName" value="StockList2" />
+                    <div class="form-group text-center">
+                        <button class="btn btn-rounded btn-primary" data-dismiss="modal">닫기</button>
+                        <button class="btn btn-rounded btn-primary" type="submit">저장</button>
+                    </div>
+                </form>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+
+
+<script>
+
+    var sStockCode = "";
+    var sStockName = "";
+    var NCONTENT = "";
+
+    $(document).ready(function () {
+        $(document).on("click", '.stockdetail', function () {
+            sStockCode = $(this).data('stockcode');
+            sStockName = $(this).data('stockname');
+            sStockRemark = $(this).data('stockremark');
+
+            //alert(sStockCode);
+            //alert(sStockName);
+
+            var v_dtl_code = document.getElementById("dtl_stock_code");
+            var v_dtl_name = document.getElementById("dtl_stock_name");
+            var v_dtl_remark = document.getElementById("dtl_stock_remark");
+
+            var str = sStockRemark;
+            v_dtl_remark.value = str.replace(/　/gi, '\r\n');
+
+            v_dtl_code.value = sStockCode;
+            v_dtl_name.value = sStockName;
+
+
+        });
+    });
+</script>
+
+
+
+<script>
+
+    var sStockCode = "";
+    var sStockName = "";
+    var NCONTENT = "";
+
+    $(document).ready(function () {
+        $(document).on("click", '.stockdetail', function () {
+            sStockCode = $(this).data('stockcode');
+            sStockName = $(this).data('stockname');
+            sStockRemark = $(this).data('stockremark');
+
+            //alert(sStockCode);
+            //alert(sStockName);
+
+            var v_dtl_code = document.getElementById("dtl_stock_code");
+            var v_dtl_name = document.getElementById("dtl_stock_name");
+            var v_dtl_remark = document.getElementById("dtl_stock_remark");
+
+            var str = sStockRemark;
+            v_dtl_remark.value = str.replace(/　/gi, '\r\n');
+
+            v_dtl_code.value = sStockCode;
+            v_dtl_name.value = sStockName;
+
+
+        });
+    });
+</script>
+
+

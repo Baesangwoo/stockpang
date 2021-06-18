@@ -26,8 +26,10 @@
         &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
         <textarea id="Reg_remark"  name="Reg_remark" rows="5" cols="50"> </textarea> <br />
 
-        <input type="submit" value="저장" /><br />
-    </form>
+        <input type="submit" value="저장" />&nbsp&nbsp&nbsp
+        <button class="btn-success btn-group" onclick="reg_delete()">삭제</button>
+</form>
+
 
 </div>
 <br />
@@ -98,7 +100,41 @@
 
     }
 
+</script>
 
+<script>
+    function reg_delete() {
 
+        var Reg_Code = document.getElementById("Reg_code").value;
+
+        if (Reg_Code == "") {
+            alert('종목을 선택하세요');
+        }
+        else {
+            $.ajax({
+                type: "GET",
+                url: "/Home/Reg_Delete/",
+                data: { Reg_Code: Reg_Code },
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    RegDelFun(response);
+                },
+                error: function (error) {
+                    alert('Error!');
+                }
+            });
+        };
+
+        function RegDelFun(jsondata) {
+
+            if (jsondata == true) {
+                alert("삭제 되었습니다.");
+
+            }
+
+        };
+    }
 
 </script>
+
