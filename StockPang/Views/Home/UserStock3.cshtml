@@ -15,7 +15,7 @@
 
 <h4>종목단가</h4>
 <div class="Search" style="font-size:70%">
-    <form action="UserStock2" method="get" role="form">
+    <form action="UserStock3" method="get" role="form">
         <label>종목명</label> <input name="Search_name" type="text" size="10" maxlength="20" />&nbsp&nbsp&nbsp
         <label>종목분류</label> <input name="Search_class" type="text" size="10" maxlength="20" />&nbsp&nbsp&nbsp
         <label>PER</label> <input name="Search_per" type="number" maxlength="3" style="width:50px" />이하&nbsp&nbsp&nbsp
@@ -34,18 +34,22 @@
         <tr>
             <th style="width: 55px; text-align: center">종목코드</th>
             <th style="width: 100px; text-align: center">종목명</th>
-            <th style="width: 70px; text-align: end">종목분류</th>
+            <th style="width: 200px; text-align: center">종목분류</th>
+            <th style="width: 50px; text-align: center">등록<br />회원수</th>
             <th style="width: 70px; text-align: end">현재주가</th>
 
             <th style="width: 70px; text-align: end">매수계획단가</th>
-            <th style="width: 80px; text-align: end">매수계획Gap(%)</th>
+            <th style="width: 80px; text-align: end">매수계획Gap</th>
+            <th style="width: 80px; text-align: end">매수계획평균</th>
 
             <th style="width: 80px; text-align: end">매도계획단가</th>
-            <th style="width: 70px; text-align: end">매도계획Gap(%)</th>
+            <th style="width: 70px; text-align: end">매도계획Gap</th>
+            <th style="width: 70px; text-align: end">매도계획평균</th>
 
-            <th style="width: 70px; text-align: end">매수평단</th>
+            <th style="width: 70px; text-align: end">매수평단평균</th>
             <th style="width: 70px; text-align: end">손익율(%)</th>
-
+            <th style="width: 70px; text-align: end">매수평단</th>
+            <th style="width: 70px; text-align: center">저장</th>
 
         </tr>
         @foreach (DataRow row in Model.Tables[0].Rows)
@@ -62,88 +66,55 @@
 
 
                 <td class="td_left" style="width:100px;text-align:left"><a href="@row["STOCK_URL"]" target="_blank">@row["STOCK_NAME"]</a></td>
-                <td>@row["STOCK_CLASS1"]</td>
+                <td class="td_left" style="width:200px;text-align:left">@row["STOCK_CLASS1"]</td>
+
+                <td>@row["REG_CNT"]</td>
                 <td>@row["STOCK_PRICE"]</td>
 
-                <!--  매수계획 -->
-                <td> <input type="text" style="text-align:right" id="buy_price" name="buy_price" value="@row["BUY_PRICE"]" /></td>
-                @if (Convert.ToDouble(row["BUY_GAP"].ToString()) >= 0)
+                <!--  매수계획,  GAP은 계획-현주가 오버 했을때가 0보다 작은값, 0보다 크야 좋음  -->
+                <td> <input type="text" style="width: 70px; text-align: right" id="buy_price" name="buy_price" value="@row["BUY_PRICE"]" /></td>
+                @if (Convert.ToDouble(row["BUY_GAP_C"].ToString()) < 0)
                 {
-                    <td>@row["BUY_GAP_C"]</td>
+                    <td style="color: black; background-color: lightgray">@row["BUY_GAP_C"]</td>
                 }
                 else
                 {
-                    <td style="color:red">@row["BUY_GAP_C"]</td>
+                    <td style="color: red; background-color: lightskyblue">@row["BUY_GAP_C"]</td>
                 }
+                <td>@row["BUY_AVG_C"]</td>
 
-                <!--  매도계획 -->
-                <td> <input type="text" style="text-align:right" id="sell_price" name="sell_price" value="@row["SELL_PRICE"]" /></td>
-                @if (Convert.ToDouble(row["SELL_GAP"].ToString()) >= 0)
+
+                <!--  매도계획, GAP은 계획-현주가 오버 했을때가 0보다 작은값, 0보다 작아야 좋음 -->
+                <td> <input type="text" style="width: 70px; text-align: right" id="sell_price" name="sell_price" value="@row["SELL_PRICE"]" /></td>
+                @if (Convert.ToDouble(row["SELL_GAP_C"].ToString()) > 0)
                 {
-                    <td>@row["SELL_GAP_C"]</td>
+                    <td style="color: black; background-color: lightgray">@row["SELL_GAP_C"]</td>
                 }
                 else
                 {
-                    <td style="color:red">@row["SELL_GAP_C"]</td>
+                    <td style="color: red; background-color: lightskyblue">@row["SELL_GAP_C"]</td>
                 }
+                <td>@row["SELL_AVG_C"]</td>
 
                 <!--  평단 -->
-                <td> <input type="text" style="text-align:right" id="avg_price" name="avg_price" value="@row["AVG_PRICE"]" /></td>
+                <td> <input type="text" style="width: 70px; text-align: right" id="avg_price" name="avg_price" value="@row["AVG_PRICE"]" /></td>
                 @if (Convert.ToDouble(row["AVG_GAP"].ToString()) >= 0)
                 {
-                    <td>@row["AVG_GAP_C"]</td>
+                    <td style="color: black; background-color: lightgray">@row["AVG_GAP_C"]</td>
                 }
                 else
                 {
-                    <td style="color:red">@row["AVG_GAP_C"]</td>
+                    <td style="color: red;; background-color: lightgray; ">@row["AVG_GAP_C"]</td>
                 }
+                <td>@row["AVG_AVG_C"]</td>
                 
-
-                <td style="text-align: center"> <button class="btn-success btn-group" onclick="save_price('@row["STOCK_CODE"]', '@row["BUY_PRICE"]', '@row["SELL_PRICE"]', '@row["AVG_PRICE"]')"> 저장</button> </td>
+                <td style="text-align: center"> <button class="btn-success btn-group" id="save_price"> 저장</button> </td>
 
 
             </tr>
         }
     </table>
 </div>
-
-
-
-<script>
-    function save_price(stock_code, buy_price, sell_price, avg_price) {
-
-
-        if (stock_code == "") {
-            alert('종목을 선택하세요');
-        }
-        else {
-            $.ajax({
-                type: "GET",
-                url: "/Home/Save_Price/",
-                data: { stock_code: stock_code, buy_price: buy_price, sell_price: sell_price, avg_price: avg_price },
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: function (response) {
-                    SavePriceFun(response);
-                },
-                error: function (error) {
-                    alert('Error!');
-                }
-            });
-        };
-
-        function SavePriceFun(jsondata) {
-
-            if (jsondata == true) {
-                alert("저장 되었습니다.");
-
-            }
-
-        };
-    }
-
-</script>
-
 
 
 
@@ -190,6 +161,68 @@
 </div><!-- /.modal -->
 
 
+ <!-- 버튼 클릭시 Row 값 가져오기-->
+ <!-- .은 클래스명, #은 아이디명 -->
+<script>
+    $("#save_price").click(function () {
+        var str = ""
+        var tdArr = new Array();    // 배열 선언
+        var checkBtn = $(this);
+
+        // checkBtn.parent() : checkBtn의 부모는 <td>이다.
+        // checkBtn.parent().parent() : <td>의 부모이므로 <tr>이다.
+        var tr = checkBtn.parent().parent();
+        var td = tr.children();
+
+        var stock_code = td.eq(0).text();
+
+        var buy_price = $(tr).find('td input:eq(0)').val();
+        var sell_price = $(tr).find('td input:eq(1)').val();
+        var avg_price = $(tr).find('td input:eq(2)').val();
+
+        //alert(stock_code + ' / ' + buy_price + ' / ' + sell_price + " / " + avg_price);
+        //저장 
+
+
+        if (stock_code == "") {
+            alert('종목을 선택하세요');
+        }
+        else {
+            $.ajax({
+                type: "GET",
+                url: "/Home/Save_Price/",
+                data: { stock_code: stock_code, buy_price: buy_price, sell_price: sell_price, avg_price: avg_price },
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    SavePriceFun(response);
+                },
+                error: function (error) {
+                    alert('Error!');
+                }
+            });
+        };
+
+        function SavePriceFun(jsondata) {
+
+            if (jsondata == true) {
+                alert("저장 되었습니다.");
+                reload_page();
+            }
+
+        };
+
+        function reload_page() {
+            location.reload();
+        }
+
+
+
+
+    }
+    );
+
+</script>
 
 
 <script>

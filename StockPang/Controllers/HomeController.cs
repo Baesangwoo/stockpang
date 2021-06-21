@@ -303,6 +303,10 @@ namespace StockPang.Controllers
             data.Tables[0].Columns.Add("SELL_GAP_C"); 
             data.Tables[0].Columns.Add("AVG_GAP_C");
 
+            data.Tables[0].Columns.Add("BUY_AVG_C");
+            data.Tables[0].Columns.Add("SELL_AVG_C");
+            data.Tables[0].Columns.Add("AVG_AVG_C");
+
             data.Tables[0].Columns.Add("STOCK_SAVE");
 
             foreach (DataRow row in data.Tables[0].Rows)
@@ -311,10 +315,19 @@ namespace StockPang.Controllers
                 double sValue = Convert.ToDouble(row["SELL_GAP"].ToString());
                 double aValue = Convert.ToDouble(row["AVG_GAP"].ToString());
 
+                double bAvg = Convert.ToDouble(row["BUY_AVG"].ToString());
+                double sAvg = Convert.ToDouble(row["SELL_AVG"].ToString());
+                double aAvg = Convert.ToDouble(row["AVG_AVG"].ToString());
+
+
                 row["BUY_GAP_C"] = bValue.ToString("0.00");
                 row["SELL_GAP_C"] = sValue.ToString("0.00");
                 row["AVG_GAP_C"] = aValue.ToString("0.00");
 
+                row["BUY_AVG_C"] = bAvg.ToString("0.00");
+                row["SELL_AVG_C"] = sAvg.ToString("0.00");
+                row["AVG_AVG_C"] = aAvg.ToString("0.00");
+                
                 row["STOCK_SAVE"] = "저장";
 
             }

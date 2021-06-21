@@ -158,9 +158,22 @@ namespace StockPang.Models
             sSql += "   SELECT  A.STOCK_CODE, B.STOCK_NAME, B.STOCK_URL, B.STOCK_CLASS1, B.STOCK_PRICE, B.NAVER_PRICE, ";
             sSql += "           A.BUY_PRICE, A.SELL_PRICE, A.AVG_PRICE,  ";
             sSql += "           A.STOCK_REMARK, ISNULL(LEN(A.STOCK_REMARK),0) as REMARK_LEN, ";
-            sSql += "           ROUND(CASE A.BUY_PRICE WHEN 0 THEN 0 ELSE (B.STOCK_PRICE - A.BUY_PRICE) / A.BUY_PRICE * 100 END,2) as BUY_GAP, ";
-            sSql += "           ROUND(CASE A.SELL_PRICE WHEN 0 THEN 0 ELSE (A.SELL_PRICE - B.STOCK_PRICE) / A.SELL_PRICE * 100 END,2) as SELL_GAP, ";
-            sSql += "           ROUND(CASE A.AVG_PRICE WHEN 0 THEN 0 ELSE (B.STOCK_PRICE - A.AVG_PRICE) / A.AVG_PRICE * 100 END,2) as AVG_GAP ";
+            sSql += "           A.BUY_PRICE - B.STOCK_PRICE as BUY_GAP, ";
+            sSql += "           A.SELL_PRICE - B.STOCK_PRICE as SELL_GAP, ";
+            sSql += "           ROUND(CASE A.AVG_PRICE WHEN 0 THEN 0 ELSE (B.STOCK_PRICE - A.AVG_PRICE) / A.AVG_PRICE * 100 END,2) as AVG_GAP, ";
+            sSql += "           (   SELECT   COUNT(*) REG_CNT ";
+            sSql += "               FROM     USER_STOCK	C    ";
+            sSql += "               WHERE    C.STOCK_CODE   = A.STOCK_CODE ) REG_CNT, ";
+            sSql += "           (   SELECT   AVG(C.BUY_PRICE) BUY_AVG ";
+            sSql += "               FROM     USER_STOCK	C    ";
+            sSql += "               WHERE    C.STOCK_CODE   = A.STOCK_CODE  AND C.BUY_PRICE > 0 ) BUY_AVG, ";
+            sSql += "           (   SELECT   AVG(C.SELL_PRICE) SELL_PRICE ";
+            sSql += "               FROM     USER_STOCK	C    ";
+            sSql += "               WHERE    C.STOCK_CODE   = A.STOCK_CODE  AND C.SELL_PRICE > 0 ) SELL_AVG, ";
+            sSql += "           (   SELECT   AVG(C.AVG_PRICE) AVG_AVG ";
+            sSql += "               FROM     USER_STOCK	C    ";
+            sSql += "               WHERE    C.STOCK_CODE   = A.STOCK_CODE AND C.AVG_PRICE > 0) AVG_AVG ";
+    
             sSql += "   FROM    USER_STOCK  A"; 
             sSql += "       ,   STOCK_INFO  B";
             sSql += "   WHERE   A.USER_ID    = " + User_ID ;      
