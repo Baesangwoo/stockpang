@@ -164,13 +164,13 @@ namespace StockPang.Models
             sSql += "           (   SELECT   COUNT(*) REG_CNT ";
             sSql += "               FROM     USER_STOCK	C    ";
             sSql += "               WHERE    C.STOCK_CODE   = A.STOCK_CODE ) REG_CNT, ";
-            sSql += "           (   SELECT   AVG(C.BUY_PRICE) BUY_AVG ";
+            sSql += "           (   SELECT   ISNULL(AVG(C.BUY_PRICE),0) BUY_AVG ";
             sSql += "               FROM     USER_STOCK	C    ";
             sSql += "               WHERE    C.STOCK_CODE   = A.STOCK_CODE  AND C.BUY_PRICE > 0 ) BUY_AVG, ";
-            sSql += "           (   SELECT   AVG(C.SELL_PRICE) SELL_PRICE ";
+            sSql += "           (   SELECT   ISNULL(AVG(C.SELL_PRICE),0) SELL_PRICE ";
             sSql += "               FROM     USER_STOCK	C    ";
             sSql += "               WHERE    C.STOCK_CODE   = A.STOCK_CODE  AND C.SELL_PRICE > 0 ) SELL_AVG, ";
-            sSql += "           (   SELECT   AVG(C.AVG_PRICE) AVG_AVG ";
+            sSql += "           (   SELECT   ISNULL(AVG(C.AVG_PRICE),0) AVG_AVG ";
             sSql += "               FROM     USER_STOCK	C    ";
             sSql += "               WHERE    C.STOCK_CODE   = A.STOCK_CODE AND C.AVG_PRICE > 0) AVG_AVG ";
     
@@ -323,7 +323,7 @@ namespace StockPang.Models
 
         }
 
-        public static DataSet SetRemarkSave(string Stock_Code, string Stock_Remark)
+        public static int SetRemarkSave(string Stock_Code, string Stock_Remark)
         {
 
             string sSql = @"";
@@ -331,32 +331,32 @@ namespace StockPang.Models
             sSql += "     SET  STOCK_REMARK = '" + Stock_Remark + "'";
             sSql += "   WHERE STOCK_CODE = '" + Stock_Code + "'";
 
-            DataSet user;
+            int Result;
 
             using (var db = new MSSQLDB())
             {
-                user = db.Query(sSql);
+                Result = db.Execute(sSql);
             }
 
-            return user;
+            return Result;
 
         }
 
-        public static DataSet SetStockDelete(string Stock_Code)
+        public static int SetStockDelete(string Stock_Code)
         {
 
             string sSql = @"";
             sSql += "   DELETE FROM STOCK_INFO ";
             sSql += "   WHERE STOCK_CODE = '" + Stock_Code + "'";
 
-            DataSet user;
+            int Result;
 
             using (var db = new MSSQLDB())
             {
-                user = db.Query(sSql);
+                Result = db.Execute(sSql);
             }
 
-            return user;
+            return Result;
 
         }
 
@@ -368,13 +368,12 @@ namespace StockPang.Models
             sSql += "   WHERE STOCK_CODE = '" + Stock_Code + "'";
             sSql += "   AND   USER_ID = " + User_ID;
 
-            DataSet user;
+            int Result;
 
             using (var db = new MSSQLDB())
             {
-                user = db.Query(sSql);
+                Result = db.Execute(sSql);
             }
-
             return true;
 
         }
@@ -390,11 +389,11 @@ namespace StockPang.Models
             sSql += "   WHERE   STOCK_CODE = '" + Stock_Code + "'";
             sSql += "   AND     USER_ID = " + User_ID;
 
-            DataSet user;
+            int Result;
 
             using (var db = new MSSQLDB())
             {
-                user = db.Query(sSql);
+                Result = db.Execute(sSql);
             }
 
             return true;

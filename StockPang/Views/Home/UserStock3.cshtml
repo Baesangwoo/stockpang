@@ -46,9 +46,9 @@
             <th style="width: 70px; text-align: end">매도계획Gap</th>
             <th style="width: 70px; text-align: end">매도계획평균</th>
 
-            <th style="width: 70px; text-align: end">매수평단평균</th>
-            <th style="width: 70px; text-align: end">손익율(%)</th>
             <th style="width: 70px; text-align: end">매수평단</th>
+            <th style="width: 70px; text-align: end">손익율(%)</th>
+            <th style="width: 70px; text-align: end">매수평단<br />평균</th>
             <th style="width: 70px; text-align: center">저장</th>
 
         </tr>
@@ -108,7 +108,7 @@
                 }
                 <td>@row["AVG_AVG_C"]</td>
                 
-                <td style="text-align: center"> <button class="btn-success btn-group" id="save_price"> 저장</button> </td>
+                <td style="text-align: center"> <button class="btn-success btn-group save_price" > 저장</button> </td>
 
 
             </tr>
@@ -164,7 +164,7 @@
  <!-- 버튼 클릭시 Row 값 가져오기-->
  <!-- .은 클래스명, #은 아이디명 -->
 <script>
-    $("#save_price").click(function () {
+    $(".save_price").click(function () {
         var str = ""
         var tdArr = new Array();    // 배열 선언
         var checkBtn = $(this);
