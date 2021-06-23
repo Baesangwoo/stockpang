@@ -94,6 +94,7 @@
 -->
 
 <!-- 현재 KOSPI 지수 가져오기 -->
+<!-- 지수를 클로링해서 저장하고 가져옴 -->
 <script>
 
     /*
@@ -108,10 +109,11 @@
     */
 
     $(document).ready(function () {
-        getKospiNow();
+        GetKospiNow();
+
     });
 
-    function getKospiNow() {
+    function GetKospiNow() {
         $.ajax({
             type: "GET",
             url: "/Home/GetRealTimeKospi",
@@ -127,7 +129,7 @@
 
     function successFuncKospi(jsondata) {
         if (jsondata == "") {
-            getKospiNow();
+            GetKospiNow();
         }
         else {
             var kospi_now = document.getElementById("KOSPI_NOW");
@@ -148,10 +150,11 @@
                 kospi_yd.style.color = "red";
             }
 
+            // 챠트 그리기 
+            ChartDisplay();
         }
     }
 </script>
-
 
 
     <!-- KOSPI 평균지수 가져오기 --> 
@@ -197,7 +200,7 @@
 
     <!-- Chart Display -->  
     <script>
-        $(document).ready(function () {
+        function ChartDisplay() {
             $.ajax({
                 type: "GET",
                 url: "/Home/GetChart/",
@@ -316,5 +319,5 @@
                 //    options: chartOptions
                 //});
             }
-        });
+        };
     </script>

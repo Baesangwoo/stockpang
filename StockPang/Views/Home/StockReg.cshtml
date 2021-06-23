@@ -14,9 +14,10 @@
     </style>*@
 
 <h4>StockRegister</h4>
+
 <div class="Reg" style="font-size:70%">
 
-    <form action="StockInsert" method="get" role="form">
+    <form action="#" method="get" role="form">
         <label>종목코드 : &nbsp</label> <input id="Reg_code" name="Reg_code" type="text" readonly size="20" maxlength="20" />&nbsp&nbsp&nbsp
         <label>종목명 : &nbsp&nbsp&nbsp </label> <input id="Reg_name"  name="Reg_name" type="text" size="20" maxlength="20" /> <br />
         <label>종목분류1 : </label> <input id="Reg_class1"  name="Reg_class1" type="text" size="20" maxlength="20" />&nbsp&nbsp&nbsp
@@ -26,7 +27,7 @@
         &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
         <textarea id="Reg_remark"  name="Reg_remark" rows="5" cols="50"> </textarea> <br />
 
-        <input type="submit" value="저장" />&nbsp&nbsp&nbsp
+        <button class="btn-success btn-group" onclick="reg_insert()">저장</button>&nbsp&nbsp&nbsp
         <button class="btn-success btn-group" onclick="reg_delete()">삭제</button>
 </form>
 
@@ -102,6 +103,54 @@
 
 </script>
 
+
+<script>
+    function reg_insert() {
+
+        var Reg_Code = document.getElementById("Reg_code").value;
+        var Reg_Name = document.getElementById("Reg_name").value;
+        var Reg_Class1 = document.getElementById("Reg_class1").value;
+        var Reg_Class2 = document.getElementById("Reg_class2").value;
+        var Reg_Remark = document.getElementById("Reg_remark").value;
+        
+        if (Reg_Code == "") {
+            alert('종목을 선택하세요');
+        }
+        else {
+            $.ajax({
+                type: "GET",
+                url: "/Home/Reg_Insert/",
+                data: { Reg_Code: Reg_Code, Reg_Name: Reg_Name, Reg_Class1: Reg_Class1, Reg_Class2: Reg_Class2, Reg_Remark: Reg_Remark },
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    alert("1");
+                    RegInsertFun(response);
+                },
+                error: function (error) {
+                    alert('Error!');
+                }
+            });
+
+        };
+
+        function RegInsertFun(jsondata) {
+
+            if (jsondata == true) {
+                alert("등록 되었습니다.");
+            }
+            else {
+                alert("등록 실패 했습니다.");
+            }
+
+
+        };
+    }
+
+</script>
+
+
+
 <script>
     function reg_delete() {
 
@@ -130,8 +179,11 @@
 
             if (jsondata == true) {
                 alert("삭제 되었습니다.");
-
             }
+            else {
+                alert("삭제 실패 했습니다.");
+            }
+
 
         };
     }

@@ -148,8 +148,7 @@ namespace StockPang.Models
         }
 
         public static DataSet GetSearchData3(
-                                            string Search_name, string Search_class, string Search_per, string Search_gap
-                                        , string Search_sa_rate, string Search_bp_rate, string Search_np_rate
+                                            string Search_name, string Search_class, string Search_buy_gap, string Search_sell_gap
                                         , string List_Type, string User_ID
             )
         {
@@ -159,7 +158,9 @@ namespace StockPang.Models
             sSql += "           A.BUY_PRICE, A.SELL_PRICE, A.AVG_PRICE,  ";
             sSql += "           A.STOCK_REMARK, ISNULL(LEN(A.STOCK_REMARK),0) as REMARK_LEN, ";
             sSql += "           A.BUY_PRICE - B.STOCK_PRICE as BUY_GAP, ";
+            sSql += "           ROUND(CASE A.BUY_PRICE WHEN 0 THEN 0 ELSE (A.BUY_PRICE - B.STOCK_PRICE) / A.BUY_PRICE * 100 END, 2) as BUY_GAP_RATE, ";
             sSql += "           A.SELL_PRICE - B.STOCK_PRICE as SELL_GAP, ";
+            sSql += "           ROUND(CASE A.SELL_PRICE WHEN 0 THEN 0 ELSE (A.SELL_PRICE - B.STOCK_PRICE) / A.SELL_PRICE * 100 END, 2) as SELL_GAP_RATE, ";
             sSql += "           ROUND(CASE A.AVG_PRICE WHEN 0 THEN 0 ELSE (B.STOCK_PRICE - A.AVG_PRICE) / A.AVG_PRICE * 100 END,2) as AVG_GAP, ";
             sSql += "           (   SELECT   COUNT(*) REG_CNT ";
             sSql += "               FROM     USER_STOCK	C    ";
@@ -181,28 +182,16 @@ namespace StockPang.Models
             sSql += "   AND   ( B.STOCK_CODE LIKE '%" + Search_name + "%'" + " OR B.STOCK_NAME LIKE '%" + Search_name + "%')";
             sSql += "   AND   ( B.STOCK_CLASS1 LIKE '%" + Search_class + "%'" + " OR B.STOCK_CLASS2 LIKE '%" + Search_class + "%')";
 
-            if (!string.IsNullOrEmpty(Search_per) && Search_per != "")
+            if (!string.IsNullOrEmpty(Search_buy_gap) && Search_buy_gap != "")
             {
-                sSql += "   AND     B.CAL_PER   <= " + Search_per;
+                sSql += "   AND   (A.BUY_PRICE - B.STOCK_PRICE) / A.BUY_PRICE * 100  <= " + Search_buy_gap ;
+                sSql += "   AND   A.BUY_PRICE <> 0 ";
             }
 
-            if (!string.IsNullOrEmpty(Search_gap) && Search_gap != "")
+            if (!string.IsNullOrEmpty(Search_sell_gap) && Search_sell_gap != "")
             {
-                sSql += "   AND  (  (B.NAVER_PRICE - B.STOCK_PRICE) / B.NAVER_PRICE * 100  >= " + Search_gap + " OR  (B.NAVER_PRICE - B.STOCK_PRICE) / B.NAVER_PRICE * 100 <=  (" + Search_gap + "*-1)  )";
-                sSql += "   AND   B.NAVER_PRICE <> 0 ";
-            }
-
-            if (!string.IsNullOrEmpty(Search_sa_rate) && Search_sa_rate != "")
-            {
-                sSql += "   AND     B.SA_RATE   >= " + Search_sa_rate;
-            }
-            if (!string.IsNullOrEmpty(Search_bp_rate) && Search_bp_rate != "")
-            {
-                sSql += "   AND     B.BP_RATE   >= " + Search_bp_rate;
-            }
-            if (!string.IsNullOrEmpty(Search_np_rate) && Search_np_rate != "")
-            {
-                sSql += "   AND     B.NP_RATE   >= " + Search_np_rate;
+                sSql += "   AND   (A.SELL_PRICE - B.STOCK_PRICE) / A.SELL_PRICE * 100  >= " + Search_sell_gap ;
+                sSql += "   AND   A.SELL_PRICE <> 0 ";
             }
             sSql += "   ORDER BY B.TOTAL_AMT DESC";
 
@@ -248,8 +237,9 @@ namespace StockPang.Models
 
         }
 
-        public static int SetStockInsert(string Reg_Code, string Reg_Name, string Reg_Class1, string Reg_Class2, string Reg_Remark, string User_ID)
+        public static bool SetStockInsert(string Reg_Code, string Reg_Name, string Reg_Class1, string Reg_Class2, string Reg_Remark, string User_ID)
         {
+            int Result = 0;
 
             string sSql = @"";
             sSql += "   MERGE INTO STOCK_INFO A  ";
@@ -310,17 +300,23 @@ namespace StockPang.Models
                 sSql += "   UPDATE";
                 sSql += "   SET	STOCK_REMARK = '" + Reg_Remark + "'";
                 sSql += "   WHEN NOT MATCHED THEN 	";
-                sSql += "   INSERT (STOCK_CODE, USER_ID, STOCK_REMARK )";
-                sSql += "   VALUES	('" + Reg_Code + "', " + User_ID + ", '" + Reg_Remark + "' );";
+                sSql += "   INSERT (STOCK_CODE, STOCK_NAME, USER_ID, STOCK_REMARK )";
+                sSql += "   VALUES	('" + Reg_Code + "', " + Reg_Name + "', " + User_ID + ", '" + Reg_Remark + "' );";
 
                 using (var db = new MSSQLDB())
                 {
                     result = db.Execute(sSql);
                 }
             }
-                        
-            return result;
 
+            if (Result > 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         public static int SetRemarkSave(string Stock_Code, string Stock_Remark)
@@ -374,8 +370,16 @@ namespace StockPang.Models
             {
                 Result = db.Execute(sSql);
             }
-            return true;
 
+
+            if (Result > 0) {
+                return true;
+            }
+            else
+	        {
+               return false;
+	        }
+ 
         }
 
         public static bool SetSavePrice(string Stock_Code, string User_ID, string Buy_Price, string Sell_Price, string Avg_Price)

@@ -18,11 +18,9 @@
     <form action="UserStock3" method="get" role="form">
         <label>종목명</label> <input name="Search_name" type="text" size="10" maxlength="20" />&nbsp&nbsp&nbsp
         <label>종목분류</label> <input name="Search_class" type="text" size="10" maxlength="20" />&nbsp&nbsp&nbsp
-        <label>PER</label> <input name="Search_per" type="number" maxlength="3" style="width:50px" />이하&nbsp&nbsp&nbsp
-        <label>목표주가Gap</label> <input name="Search_gap" type="number" size="5" maxlength="3" style="width:50px" />이상&nbsp&nbsp&nbsp
-        <label>매출성장율</label> <input name="Search_sa_rate" type="number" size="5" maxlength="3" style="width:50px" />이상&nbsp&nbsp&nbsp
-        <label>영업이익성장율</label> <input name="Search_bp_rate" type="number" size="3" maxlength="4" style="width:50px" />이상&nbsp&nbsp&nbsp
-        <label>순이익성장율</label> <input name="Search_np_rate" type="number" size="3" maxlength="4" style="width:50px" />이상&nbsp&nbsp&nbsp
+
+        <label>매수계획Gap(%)</label> <input name="Search_buy_gap" type="number" maxlength="3" style="width:50px" />이상&nbsp&nbsp&nbsp
+        <label>매도계획Gap(%)</label> <input name="Search_sell_gap" type="number" size="5" maxlength="3" style="width:50px" />이하&nbsp&nbsp&nbsp
 
         <input type="submit" value="Search" />
     </form>
@@ -40,10 +38,12 @@
 
             <th style="width: 70px; text-align: end">매수계획단가</th>
             <th style="width: 80px; text-align: end">매수계획Gap</th>
+            <th style="width: 80px; text-align: end">매수계획<br />Gap(%)</th>
             <th style="width: 80px; text-align: end">매수계획평균</th>
 
             <th style="width: 80px; text-align: end">매도계획단가</th>
             <th style="width: 70px; text-align: end">매도계획Gap</th>
+            <th style="width: 70px; text-align: end">매도계획<br />Gap(%)</th>
             <th style="width: 70px; text-align: end">매도계획평균</th>
 
             <th style="width: 70px; text-align: end">매수평단</th>
@@ -71,28 +71,47 @@
                 <td>@row["REG_CNT"]</td>
                 <td>@row["STOCK_PRICE"]</td>
 
-                <!--  매수계획,  GAP은 계획-현주가 오버 했을때가 0보다 작은값, 0보다 크야 좋음  -->
+                <!--  매수계획,  GAP은 계획-현주가 오버 했을때가 0보다 작은값, 0보다 크야 좋음, 3%이내면 색칠  -->
                 <td> <input type="text" style="width: 70px; text-align: right" id="buy_price" name="buy_price" value="@row["BUY_PRICE"]" /></td>
-                @if (Convert.ToDouble(row["BUY_GAP_C"].ToString()) < 0)
+                @if (Convert.ToDouble(row["BUY_GAP_RATE"].ToString()) < 0)
                 {
-                    <td style="color: black; background-color: lightgray">@row["BUY_GAP_C"]</td>
+                    if (Convert.ToDouble(row["BUY_GAP_RATE"].ToString()) >= -3) { 
+                        <td style="color: blue; background-color: lightgreen">@row["BUY_GAP_C"]</td>
+                        <td style="color: blue; background-color: lightgreen; ">@row["BUY_GAP_RATE_C"]</td>               
+                    }
+                    else
+                    {
+                        <td style="color: black; background-color: lightgray">@row["BUY_GAP_C"]</td>
+                        <td style="color: black; background-color: lightgray">@row["BUY_GAP_RATE_C"]</td>                              
+                    } 
                 }
                 else
                 {
                     <td style="color: red; background-color: lightskyblue">@row["BUY_GAP_C"]</td>
+                    <td style="color: red; background-color: lightskyblue">@row["BUY_GAP_RATE_C"]</td>
                 }
                 <td>@row["BUY_AVG_C"]</td>
 
 
                 <!--  매도계획, GAP은 계획-현주가 오버 했을때가 0보다 작은값, 0보다 작아야 좋음 -->
                 <td> <input type="text" style="width: 70px; text-align: right" id="sell_price" name="sell_price" value="@row["SELL_PRICE"]" /></td>
-                @if (Convert.ToDouble(row["SELL_GAP_C"].ToString()) > 0)
+                @if (Convert.ToDouble(row["SELL_GAP_RATE"].ToString()) > 0)
                 {
-                    <td style="color: black; background-color: lightgray">@row["SELL_GAP_C"]</td>
+                    if (Convert.ToDouble(row["SELL_GAP_RATE"].ToString()) <= 3)
+                    { 
+                        <td style="color: blue; background-color: lightgreen">@row["SELL_GAP_C"]</td>
+                        <td style="color: blue; background-color: lightgreen; ">@row["SELL_GAP_RATE_C"]</td>               
+                    }
+                    else
+                    {
+                        <td style="color: black; background-color: lightgray">@row["SELL_GAP_C"]</td>
+                        <td style="color: black; background-color: lightgray">@row["SELL_GAP_RATE_C"]</td>                              
+                    } 
                 }
                 else
                 {
                     <td style="color: red; background-color: lightskyblue">@row["SELL_GAP_C"]</td>
+                    <td style="color: red; background-color: lightskyblue">@row["SELL_GAP_RATE_C"]</td>
                 }
                 <td>@row["SELL_AVG_C"]</td>
 
@@ -100,7 +119,7 @@
                 <td> <input type="text" style="width: 70px; text-align: right" id="avg_price" name="avg_price" value="@row["AVG_PRICE"]" /></td>
                 @if (Convert.ToDouble(row["AVG_GAP"].ToString()) >= 0)
                 {
-                    <td style="color: black; background-color: lightgray">@row["AVG_GAP_C"]</td>
+                    <td style="color: black; background-color: lightskyblue">@row["AVG_GAP_C"]</td>
                 }
                 else
                 {
@@ -117,7 +136,7 @@
 </div>
 
 
-
+<!-- 상세정보 : 모달 -->
 <div id="detail-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" style="font-size:70%">
     <div class="modal-dialog">
         <div class="modal-content">

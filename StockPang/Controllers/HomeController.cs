@@ -283,8 +283,7 @@ namespace StockPang.Controllers
             return View("StockList2", data);
         }
 
-        public ActionResult UserStock3(string Search_name, string Search_class, string Search_per, string Search_gap, string Search_sa_rate
-                                    , string Search_bp_rate, string Search_np_rate
+        public ActionResult UserStock3(string Search_name, string Search_class, string Search_buy_gap, string Search_sell_gap
                                 )
         {
             DataSet data = null;
@@ -298,10 +297,15 @@ namespace StockPang.Controllers
                 userID = Request.Cookies["USER_INFO"].Values["USER_ID"].ToString();
             }
 
-            data = modelStockList.GetSearchData3(Search_name, Search_class, Search_per, Search_gap, Search_sa_rate, Search_bp_rate, Search_np_rate, "User", userID);
+            data = modelStockList.GetSearchData3(Search_name, Search_class, Search_buy_gap, Search_sell_gap, "User", userID);
             data.Tables[0].Columns.Add("BUY_GAP_C");
             data.Tables[0].Columns.Add("SELL_GAP_C"); 
             data.Tables[0].Columns.Add("AVG_GAP_C");
+
+            data.Tables[0].Columns.Add("BUY_GAP_RATE_C");
+            data.Tables[0].Columns.Add("SELL_GAP_RATE_C");
+            data.Tables[0].Columns.Add("AVG_GAP_RATE_C");
+
 
             data.Tables[0].Columns.Add("BUY_AVG_C");
             data.Tables[0].Columns.Add("SELL_AVG_C");
@@ -320,6 +324,10 @@ namespace StockPang.Controllers
                 double aAvg = Convert.ToDouble(row["AVG_AVG"].ToString());
 
 
+                double bRate = Convert.ToDouble(row["BUY_GAP_RATE"].ToString());
+                double sRate = Convert.ToDouble(row["SELL_GAP_RATE"].ToString());
+
+
                 row["BUY_GAP_C"] = bValue.ToString("0.00");
                 row["SELL_GAP_C"] = sValue.ToString("0.00");
                 row["AVG_GAP_C"] = aValue.ToString("0.00");
@@ -327,7 +335,11 @@ namespace StockPang.Controllers
                 row["BUY_AVG_C"] = bAvg.ToString("0.00");
                 row["SELL_AVG_C"] = sAvg.ToString("0.00");
                 row["AVG_AVG_C"] = aAvg.ToString("0.00");
-                
+
+                row["BUY_GAP_RATE_C"] = bRate.ToString("0.00");
+                row["SELL_GAP_RATE_C"] = sRate.ToString("0.00");
+
+
                 row["STOCK_SAVE"] = "저장";
 
             }
@@ -337,6 +349,22 @@ namespace StockPang.Controllers
 
         public ActionResult StockReg(string Search_name, string Search_class)
         {
+
+            string User_ID;
+            if (Request.Cookies["USER_INFO"] == null)
+            {
+                User_ID = "0";
+            }
+            else
+            {
+                User_ID = Request.Cookies["USER_INFO"].Values["USER_ID"].ToString();
+            }
+
+            if (User_ID == "0")
+            {
+                return Redirect("/login/login");
+            }
+
             DataSet data = null;
 
             data = modelStockList.GetSearchReg(Search_name, Search_class );
@@ -364,11 +392,11 @@ namespace StockPang.Controllers
             return Redirect(ViewName);
         }
 
-
-        public ActionResult StockInsert(string Reg_Code, string Reg_Name, string Reg_Class1, string Reg_Class2, string Reg_Remark)
+        public ActionResult Reg_Insert(string Reg_Code, string Reg_Name, string Reg_Class1, string Reg_Class2, string Reg_Remark)
         {
-            DataSet data = null;
+
             string userID;
+            bool Result;
 
             if (string.IsNullOrEmpty(Reg_Code))
             {
@@ -385,17 +413,19 @@ namespace StockPang.Controllers
                 userID = Request.Cookies["USER_INFO"].Values["USER_ID"].ToString();
             }
 
-            modelStockList.SetStockInsert(Reg_Code, Reg_Name, Reg_Class1, Reg_Class2, Reg_Remark, userID);
+
+            Result = modelStockList.SetStockInsert(Reg_Code, Reg_Name, Reg_Class1, Reg_Class2, Reg_Remark, userID);
 
 
-            return Redirect("StockReg");
+            return Json(Result, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult Reg_Delete(string Reg_Code)
         {
-            DataSet data = null;
+
             bool Result;
             string userID;
+
             if (Request.Cookies["USER_INFO"] == null)
             {
                 userID = "0";
