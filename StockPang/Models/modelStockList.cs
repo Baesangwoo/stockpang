@@ -301,7 +301,7 @@ namespace StockPang.Models
                 sSql += "   SET	STOCK_REMARK = '" + Reg_Remark + "'";
                 sSql += "   WHEN NOT MATCHED THEN 	";
                 sSql += "   INSERT (STOCK_CODE, STOCK_NAME, USER_ID, STOCK_REMARK )";
-                sSql += "   VALUES	('" + Reg_Code + "', " + Reg_Name + "', " + User_ID + ", '" + Reg_Remark + "' );";
+                sSql += "   VALUES	('" + Reg_Code + "', '" + Reg_Name + "', " + User_ID + ", '" + Reg_Remark + "' );";
 
                 using (var db = new MSSQLDB())
                 {
@@ -309,7 +309,7 @@ namespace StockPang.Models
                 }
             }
 
-            if (Result > 0)
+            if (result > 0)
             {
                 return true;
             }

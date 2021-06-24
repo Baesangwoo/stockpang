@@ -416,7 +416,6 @@ namespace StockPang.Controllers
 
             Result = modelStockList.SetStockInsert(Reg_Code, Reg_Name, Reg_Class1, Reg_Class2, Reg_Remark, userID);
 
-
             return Json(Result, JsonRequestBehavior.AllowGet);
         }
 

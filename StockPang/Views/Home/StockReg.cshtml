@@ -70,7 +70,7 @@
                 <td style="width:250px;text-align:left"> @row["STOCK_REMARK"]</td>
 
 
-                <td style="text-align: center"> <button class="btn-success btn-group" onclick="reg_select('@row["STOCK_CODE"]', '@row["STOCK_NAME"]', '@row["STOCK_CLASS1"]', '@row["STOCK_CLASS2"]', '@row["STOCK_REMARK"].ToString().Replace("\r\n", "　")')"> 선택</button> </td>
+                <td style="text-align: center"> <button class="btn-success btn-group" onclick="reg_select('@row["STOCK_CODE"]', '@row["STOCK_NAME"]', '@row["STOCK_CLASS1"]', '@row["STOCK_CLASS2"]', '@row["STOCK_REMARK"].ToString().Replace("\r\n", "\ta").Replace("\n", "\ta")')"> 선택</button> </td>
 
             </tr>
         }
@@ -87,8 +87,9 @@
         var v_reg_remark = document.getElementById("Reg_remark");
 
         var str = reg_remark;
+
         //alert(str);
-        v_reg_remark.value = str.replace(/　/gi, '\r\n');
+        v_reg_remark.value = str.replace(/\ta/gi, '\r\n');
 
         /*
         alert(v_reg_remark);
@@ -124,7 +125,6 @@
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function (response) {
-                    alert("1");
                     RegInsertFun(response);
                 },
                 error: function (error) {
@@ -135,7 +135,6 @@
         };
 
         function RegInsertFun(jsondata) {
-
             if (jsondata == true) {
                 alert("등록 되었습니다.");
             }
