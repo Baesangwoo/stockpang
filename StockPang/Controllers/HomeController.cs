@@ -89,6 +89,7 @@ namespace StockPang.Controllers
 
             }
 
+            ViewData["VIEWNAME"] = "StockList";
             return View("StockList", data);
         }
 
@@ -147,6 +148,7 @@ namespace StockPang.Controllers
 
             }
 
+            ViewData["VIEWNAME"] = "UserStock";
             return View("StockList", data);
         }
 
@@ -208,6 +210,7 @@ namespace StockPang.Controllers
     
             }
 
+            ViewData["VIEWNAME"] = "StockList2";
             return View("StockList2", data);
         }
 
@@ -280,6 +283,7 @@ namespace StockPang.Controllers
 
             }
 
+            ViewData["VIEWNAME"] = "UserStock2";
             return View("StockList2", data);
         }
 

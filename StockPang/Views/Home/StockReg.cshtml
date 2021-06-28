@@ -17,7 +17,7 @@
 
 <div class="Reg" style="font-size:70%">
 
-    <form action="#" method="get" role="form">
+
         <label>종목코드 : &nbsp</label> <input id="Reg_code" name="Reg_code" type="text" readonly size="20" maxlength="20" />&nbsp&nbsp&nbsp
         <label>종목명 : &nbsp&nbsp&nbsp </label> <input id="Reg_name"  name="Reg_name" type="text" size="20" maxlength="20" /> <br />
         <label>종목분류1 : </label> <input id="Reg_class1"  name="Reg_class1" type="text" size="20" maxlength="20" />&nbsp&nbsp&nbsp
@@ -29,7 +29,7 @@
 
         <button class="btn-success btn-group" onclick="reg_insert()">저장</button>&nbsp&nbsp&nbsp
         <button class="btn-success btn-group" onclick="reg_delete()">삭제</button>
-</form>
+
 
 
 </div>
@@ -141,7 +141,7 @@
             else {
                 alert("등록 실패 했습니다.");
             }
-
+            location.reload;
 
         };
     }
