@@ -127,11 +127,13 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\List1Controller.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="DataBase\MSSQLDB.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\modelList1.cs" />
     <Compile Include="Models\modelChart.cs" />
     <Compile Include="Models\modelLogin.cs" />
     <Compile Include="Models\modelStockList.cs" />
@@ -875,7 +877,7 @@
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
-    <Content Include="Views\Home\StockList.cshtml" />
+    <Content Include="Views\List1\StockList.cshtml" />
     <Content Include="Views\Home\StockDetail.cshtml" />
     <Content Include="Views\Home\StockList2.cshtml" />
     <Content Include="Views\Home\StockReg.cshtml" />
